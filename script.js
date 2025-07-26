@@ -92,43 +92,36 @@ function QuaggaJS() {
 }*/
     function QuaggaReset(){
         Quagga.init({
-            inputStream: {
-                type: "LiveStream",
-                target: document.querySelector('#canvas')
-            },
-            constraints: {
-                facingMode: "environment",
-            },
-            decoder: {
-                readers: [ "ean_reader" ]
-            } 
-        }, 
-        function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log("リセット完了したよ！");
-        });      
+    inputStream: {
+      name: "Live",
+      type: "LiveStream",
+      target: document.querySelector('#camera'),
+      constraints: {
+        facingMode: "environment"
+      },
+      area: { // 読み取り範囲（カメラ映像の中心を小さく指定）
+        top: "40%",
+        right: "10%",
+        left: "10%",
+        bottom: "40%"
+      }
+    },
+    decoder: {
+      readers: ["ean_reader", "ean_8_reader"]
+    }
+  }, function(err) {
+    if (err) {
+      alert("カメラを開けませんでした: " + err);
+      return;
+    }
+    Quagga.start();
+  });
     };
 function QuaggaJS(){
     Quagga.start();
-        Quagga.onProcessed(function(result){
-            var ctx = Quagga.canvas.ctx.overlay;
-            var canvas = Quagga.canvas.dom.overlay;
-
-            ctx.clearRect(0, 0, parseInt(canvas.width), parseInt(canvas.height));
-
-            if (result) {
-                if (result.box) {
-                    console.log(JSON.stringify(result.box));
-                    Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, ctx, {color: 'blue', lineWidth: 2});
-                }
-            }
-        });
-
-        Quagga.onDetected(function(result){
-            document.getElementById("item-name").innerHTML = result.codeResult.code;
-            alert(result.codeResult.code)
-        });
+        Quagga.onDetected(function(result) {
+    const code = result.codeResult.code;
+    alert("読み取ったコード: " + code);
+    Quagga.stop();
+  })
 }
