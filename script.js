@@ -114,7 +114,6 @@ function QuaggaJS() {
       alert("カメラを開けませんでした: " + err);
       return;
     }
-    Quagga.start();
   });
     };
 function QuaggaJS(){
