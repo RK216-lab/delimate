@@ -94,7 +94,7 @@ function QuaggaJS() {
         Quagga.init({
             inputStream: {
                 type: "LiveStream",
-                target: document.querySelector('#container')
+                target: document.querySelector('#canvas')
             },
             constraints: {
                 facingMode: "environment",
