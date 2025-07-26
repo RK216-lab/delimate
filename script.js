@@ -53,7 +53,7 @@ function QuaggaReset(){
             }
         },
         decoder: {
-            readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "qr_reader"]
+            readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader"]
         }
     }, function (err) {
         if (err) {
@@ -67,6 +67,7 @@ function QuaggaReset(){
         var code = result.codeResult.code;
         console.log(code);
         alert(code);
+        document.createElement = "<h1>code</h1>"
         Quagga.stop();
     });
 });}
