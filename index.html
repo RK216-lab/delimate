@@ -3,6 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <title>Delimate</title>
+        <script type="text/javascript" src="https://serratus.github.io/quaggaJS/examples/js/quagga.min.js"></script>
+        <script src="script.js"></script>
+        <script>QuaggaReset()</script>
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,16 +13,17 @@
     </head>
     <body>
         <h1>Delimate</h1>
-        <nav>
-        <ul>
-            <a href="scan.html">食品登録</a>
-            <a href="alllist.html">食品リスト</a>
-            <a href="report.html">レポート</a>
-            <a href="settings.html">設定</a>
-        </ul>
-    </nav>
+        <h2 id="midashi">食品登録</h2>
+        <button id = "toCode" onclick = "QuaggaJS()">バーコードリーダーを起動</button>
+        <div id="canvas" style="width:300px; height:200px; border:1px solid #ccc;"></div>
+        <!--<form id="item-form">
+            <button id = "toCode" onclick = "QuaggaJS()">バーコードリーダーを起動</button>
+            <div id = "scan"></div>
+            <input type="text" id="item-name" placeholder="商品名">
+            <input type="date" id="kigen" required/>
+            <button type="button" onclick="Submit()">登録</button>
+        </form>-->
         <h2 id = "midashi">食品リスト</h2>
-        <ul id="list">商品名--期限</ul>
-        <script src="script.js"></script>
+        <ul id="add">商品名--期限</ul>
     </body>
 </html>
