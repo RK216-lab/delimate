@@ -41,33 +41,37 @@ function ReWrite(){
         list.innerHTML += "<br>" + `${all[n].name}` +"--" +`${all[n].date}` +"<button id='" + n + "' onclick='Delete()'>削除</button>"; 
     }
 }
-function QuaggaJS(){
-    document.addEventListener("DOMContentLoaded",function(){
-        Quagga.init({
-            inputStream :{
-                type:"LiveStream",
-                target: document.querySelector('#canvas'), //表示場所
-                constraints:{
-                    facingMode: "environment" //背面カメラ
-                }
-            },
-            decoder:{
-                readers:["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "qr_reader"]
-                //バーコード種類
+// ページ読み込み時に初期化
+function QuaggaReset(){
+    document.addEventListener("DOMContentLoaded", function () {
+    Quagga.init({
+        inputStream: {
+            type: "LiveStream",
+            target: document.querySelector("#canvas"),
+            constraints: {
+                facingMode: "environment"
             }
-        },function(err){
-            if (err) {
-                console.error(err);
-                return;
+        },
+        decoder: {
+            readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "qr_reader"]
+        }
+    }, function (err) {
+        if (err) {
+            console.error(err);
+            return;
         }
         console.log("Quagga初期化完了");
-        Quagga.start();
     });
-    //検出時
-    Quagga.onDetected(function(result){
+    
+    Quagga.onDetected(function (result) {
         var code = result.codeResult.code;
-        console.log(code)
-        alert(code)
+        console.log(code);
+        alert(code);
         Quagga.stop();
-    })
-})}
+    });
+});}
+
+// ボタン押したらスタート
+function QuaggaJS() {
+    Quagga.start();
+}
