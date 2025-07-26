@@ -90,20 +90,17 @@ function ReWrite(){
 function QuaggaJS() {
     Quagga.start();
 }*/
-    function QuaggaReset(){
-        Quagga.init({
+    function QuaggaReset() {
+  Quagga.init({
     inputStream: {
       name: "Live",
       type: "LiveStream",
-      target: document.querySelector('#camera'),
+      target: document.querySelector('#canvas'),
       constraints: {
         facingMode: "environment"
       },
-      area: { // 読み取り範囲（カメラ映像の中心を小さく指定）
-        top: "40%",
-        right: "10%",
-        left: "10%",
-        bottom: "40%"
+      area: {
+        top: "40%", right: "10%", left: "10%", bottom: "40%"
       }
     },
     decoder: {
@@ -114,13 +111,19 @@ function QuaggaJS() {
       alert("カメラを開けませんでした: " + err);
       return;
     }
-  });
-    };
-function QuaggaJS(){
     Quagga.start();
-        Quagga.onDetected(function(result) {
-    const code = result.codeResult.code;
-    alert("読み取ったコード: " + code);
-    Quagga.stop();
-  })
+    console.log(" Quagga started!");
+
+    // 検出イベントはinitの中で1回だけ設定
+    Quagga.onDetected(function(result) {
+      const code = result.codeResult.code;
+      alert("読み取ったコード: " + code);
+      document.getElementById("item-name").value = code;
+      Quagga.stop();
+    });
+  });
+}
+
+function QuaggaJS() {
+  QuaggaReset(); // ← initもstartも含めて実行
 }
