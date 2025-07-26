@@ -42,8 +42,7 @@ function ReWrite(){
     }
 }
 // ページ読み込み時に初期化
-function QuaggaReset(){
-    document.addEventListener("DOMContentLoaded", function () {
+function QuaggaReset() {
     Quagga.init({
         inputStream: {
             type: "LiveStream",
@@ -61,26 +60,33 @@ function QuaggaReset(){
             return;
         }
         console.log("Quagga初期化完了");
+        Quagga.start();
     });
-    
-    Quagga.onDetected(function (result) {
-        var code = result.codeResult.code;
-        console.log(code);
-        alert(code);
-        document.createElement = "<h1>code</h1>"
-        Quagga.stop();
-    });
-});}
 
-// ボタン押したらスタート
-function QuaggaJS() {
-    Quagga.onProcessed(function(result){
+    // 枠を描画
+    Quagga.onProcessed(function (result) {
         var ctx = Quagga.canvas.ctx.overlay;
         var canvas = Quagga.canvas.dom.overlay;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (result && result.boxes) {
-            result.boxes.forEach(function(box){
-                Quagga.ImageDebug.drawPath(box, {x:0, y:1}, ctx, {color: 'green', lineWidth: 2});
+            result.boxes.forEach(function (box) {
+                Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, ctx, { color: 'green', lineWidth: 2 });
             });
+        }
+    });
+
+    // 読み取り時
+    Quagga.onDetected(function (result) {
+        var code = result.codeResult.code;
+        console.log(code);
+        alert(code);
+        document.getElementById("item-name").value = code;
+        Quagga.stop();
+    });
+}
+
+
+// ボタン押したらスタート
+function QuaggaJS() {
     Quagga.start();
-}})}
+}
