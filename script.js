@@ -42,7 +42,7 @@ function ReWrite(){
     }
 }
 // ページ読み込み時に初期化
-/*function QuaggaReset() {
+function QuaggaReset() {
     Quagga.init({
         inputStream: {
             type: "LiveStream",
@@ -90,7 +90,7 @@ function ReWrite(){
 function QuaggaJS() {
     Quagga.start();
 }*/
-    function QuaggaReset() {
+/*  function QuaggaReset() {
   Quagga.init({
     inputStream: {
       name: "Live",
@@ -126,4 +126,4 @@ function QuaggaJS() {
 
 function QuaggaJS() {
   QuaggaReset(); // ← initもstartも含めて実行
-}
+} */
