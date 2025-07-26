@@ -73,5 +73,13 @@ function QuaggaReset(){
 
 // ボタン押したらスタート
 function QuaggaJS() {
+    Quagga.onProcessed(function(result){
+        var ctx = Quagga.canvas.ctx.overlay;
+        var canvas = Quagga.canvas.dom.overlay;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (result && result.boxes) {
+            result.boxes.forEach(function(box){
+                Quagga.ImageDebug.drawPath(box, {x:0, y:1}, ctx, {color: 'green', lineWidth: 2});
+            });
     Quagga.start();
-}
+}})}
