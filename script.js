@@ -129,5 +129,6 @@ function QuaggaJS(){
 
         Quagga.onDetected(function(result){
             document.getElementById("item-name").innerHTML = result.codeResult.code;
+            alert(result.codeResult.code)
         });
 }

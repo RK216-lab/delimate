@@ -7,8 +7,9 @@ body{
     font-family: "Zen Kaku Gothic Antique";
     background-color:sandybrown;
 }
-#list{
+#add{
     background-color: white;
+    padding-left: 50%;
 }
 nav{
   background-color: beige;
