@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang = "ja">
+<html lang="ja">
     <head>
         <meta charset="UTF-8">
         <title>Delimate</title>
         <script src="https://unpkg.com/@ericblade/quagga2@1.7.4/dist/quagga.min.js"></script>
         <script src="script.js"></script>
-        <script>QuaggaReset()</script>
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,18 +13,12 @@
     <body>
         <h1>Delimate</h1>
         <h2 id="midashi">食品登録</h2>
-        <button id = "toCode" onclick = "QuaggaJS()">バーコードリーダーを起動</button>
+        <button id="toCode" onclick="QuaggaJS()">バーコードリーダーを起動</button>
         <div id="container"></div>
-        <p id="process"></p>
-        <p id="result"></p>
-        <!--<form id="item-form">
-            <button id = "toCode" onclick = "QuaggaJS()">バーコードリーダーを起動</button>
-            <div id = "scan"></div>
-            <input type="text" id="item-name" placeholder="商品名">
-            <input type="date" id="kigen" required/>
-            <button type="button" onclick="Submit()">登録</button>
-        </form>-->
-        <h2 id = "midashi">食品リスト</h2>
+        <p id="process">「バーコードリーダーを起動」ボタンを押してください。</p>
+        <p id="result">検出されたバーコード: なし</p>
+        
+        <h2 id="midashi">食品リスト</h2>
         <ul id="add">商品名--期限</ul>
     </body>
 </html>
