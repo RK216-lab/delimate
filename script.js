@@ -60,13 +60,11 @@ function QuaggaReset() {
                 console.log(err);
                 return;
             }
-            console.log("初期化しゅーりょー");
-            alert('Ready!?');
-        });    
-}
-function QuaggaJS(){
-    Quagga.start();
-    Quagga.onProcessed(function(result){
+            console.log("Initialization finished. Ready to start");
+            Quagga.start();
+        });
+
+        Quagga.onProcessed(function(result){
             var ctx = Quagga.canvas.ctx.overlay;
             var canvas = Quagga.canvas.dom.overlay;
 
@@ -82,7 +80,8 @@ function QuaggaJS(){
 
         Quagga.onDetected(function(result){
             document.querySelector('#result').textContent = result.codeResult.code;
-        });      
+            alert(result.codeResult.code)
+        });        
         };
 
 
