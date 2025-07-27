@@ -44,40 +44,49 @@ function ReWrite(){
 // ページ読み込み時に初期化
 function QuaggaReset() {
     Quagga.init({
-        inputStream: {
-            type: "LiveStream",
-            target: document.querySelector("#canvas"),
+            inputStream: {
+                type: "LiveStream",
+                target: document.querySelector('#container')
+            },
             constraints: {
-                facingMode: "environment"
+                facingMode: "environment",
+            },
+            decoder: {
+                readers: [ "ean_reader" ]
+            } 
+        }, 
+        function(err) {
+            if (err) {
+                console.log(err);
+                return;
             }
-        },
-        decoder: {
-            readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader"]
-        }
-    }, function (err) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log("Quagga初期化完了");
-        Quagga.start();
-    });
-
-    // 読み取り時
-    Quagga.onDetected(function (result) {
-        var code = result.codeResult.code;
-        console.log(code);
-        alert(code);
-        document.getElementById("item-name").value = code;
-        Quagga.stop();
-    });
+            console.log("初期化しゅーりょー");
+            alert('Ready!?');
+        });    
 }
+function QuaggaJS(){
+    Quagga.start();
+    Quagga.onProcessed(function(result){
+            var ctx = Quagga.canvas.ctx.overlay;
+            var canvas = Quagga.canvas.dom.overlay;
+
+            ctx.clearRect(0, 0, parseInt(canvas.width), parseInt(canvas.height));
+
+            if (result) {
+                if (result.box) {
+                    console.log(JSON.stringify(result.box));
+                    Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, ctx, {color: 'blue', lineWidth: 2});
+                }
+            }
+        });
+
+        Quagga.onDetected(function(result){
+            document.querySelector('#result').textContent = result.codeResult.code;
+        });      
+        };
 
 
 // ボタン押したらスタート
-function QuaggaJS() {
-    Quagga.start();
-}*/
 /*  function QuaggaReset() {
   Quagga.init({
     inputStream: {
