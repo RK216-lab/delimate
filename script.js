@@ -113,7 +113,7 @@ function QuaggaJS() {
             .then(json => {
                 if (json.product && json.product.length > 0){
                     const product = json.product[0];
-                    alert(product.ItemName);
+                    alert(product.itemName);
                     alert(product.makerName);
                 } else {
                     alert("商品が見つからなかったようです")
