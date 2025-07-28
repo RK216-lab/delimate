@@ -18,3 +18,7 @@ nav{
         width: 100%;
         height: auto;
     }
+#navigation { 
+  background-color: white;
+  color: green;
+}

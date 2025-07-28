@@ -1,3 +1,24 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBR_tS9B2FcQLsDU2Mbiezj29lhiijgkNQ",
+  authDomain: "delimate-rk.firebaseapp.com",
+  projectId: "delimate-rk",
+  storageBucket: "delimate-rk.firebasestorage.app",
+  messagingSenderId: "698442193271",
+  appId: "1:698442193271:web:678b118002a66b3ec8a972",
+  measurementId: "G-91G80CMZG3"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 let item;
 let date;
 let list;
@@ -66,16 +87,13 @@ function QuaggaJS() {
         },
         function(err) {
             if (err) {
-                console.error(err);
-                document.querySelector('#process').textContent = "エラー: カメラの起動に失敗しました。カメラへのアクセスを許可しているか、別のアプリで使用中でないか確認してください。";
+                alert("カメラの起動に失敗しました。カメラへのアクセスを許可しているか、別のアプリで使用中でないか確認してください。")
                 document.querySelector('#container').style.display = 'none'; // エラー時は映像コンテナを非表示に
                 return;
             }
-            console.log("QuaggaJSの初期化が完了しました。スキャン準備完了。");
-            document.querySelector('#process').textContent = "バーコードをスキャンする準備ができました。カメラが起動しています...";
-            document.querySelector('#container').style.display = 'block'; // 起動時は映像コンテナを表示
-            Quagga.start(); // QuaggaJSの処理を開始
-            Quagga.initialized = true; // 初期化済みフラグを設定
+            console.log("スキャン準備完了");
+            Quagga.start(); // 処理を開始
+            Quagga.initialized = true; // 初期化済み
         });
 
     // 処理中の映像に描画するイベントハンドラ
@@ -120,6 +138,7 @@ function QuaggaJS() {
                 }
             })
             .catch(err => alert("エラーが発生しました"))
+            return;
         } else {
             alert("再読み込みします。")
             location.reload();
