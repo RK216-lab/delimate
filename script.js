@@ -104,6 +104,9 @@ function QuaggaJS() {
         const detectedCode = result.codeResult.code;
         let codeReader = confirm (`認識コードは${detectedCode}で正しいですか？`)
         if (codeReader){
+            Quagga.initialized = false; 
+            document.querySelector('#container').innerHTML = ''; // コンテナをクリア
+            document.querySelector('#container').style.display = 'none'; // 映像コンテナを非表示に
             Quagga.stop()
             fetch(`https://api.jancodelookup.com/?appId=6807825cfc344aa8a9f9dfe96e3ae809&query=${detectedCode}&type=[code]`)
             .then(res => res.json())
@@ -121,14 +124,6 @@ function QuaggaJS() {
             alert("再読み込みします。")
             location.reload();
         }
-        document.querySelector('#result').textContent = "検出されたバーコード: " + detectedCode;
-        document.querySelector('#process').textContent = "バーコードが検出されました！コード: " + detectedCode;
-        alert("バーコードを検出しました: " + detectedCode);
-
-        Quagga.stop(); // バーコード検出後、カメラを停止
-        Quagga.initialized = false; // フラグをリセット
-        document.querySelector('#container').innerHTML = ''; // コンテナをクリア
-        document.querySelector('#container').style.display = 'none'; // 映像コンテナを非表示に
 
         // ここで検出したバーコード（detectedCode）を使って、
         // 商品情報の検索や登録フォームへの自動入力などの次の処理を行います。
