@@ -102,6 +102,25 @@ function QuaggaJS() {
     // バーコードを検出した際のイベントハンドラ
     Quagga.onDetected(function(result) {
         const detectedCode = result.codeResult.code;
+        let codeReader = confirm (`認識コードは${detectedCode}で正しいですか？`)
+        if (codeReader){
+            Quagga.stop()
+            fetch(`https://api.jancodelookup.com/?appId=6807825cfc344aa8a9f9dfe96e3ae809&query=${detectedCode}&type=[code]`)
+            .then(res => res.json())
+            .then(json => {
+                if (json.product && json.product.length > 0){
+                    const product = json.product[0];
+                    alert(product.ItemName);
+                    alert(product.makerName);
+                } else {
+                    alert("商品が見つからなかったようです")
+                }
+            })
+            .catch(err => alert("エラーが発生しました"))
+        } else {
+            alert("再読み込みします。")
+            location.reload();
+        }
         document.querySelector('#result').textContent = "検出されたバーコード: " + detectedCode;
         document.querySelector('#process').textContent = "バーコードが検出されました！コード: " + detectedCode;
         alert("バーコードを検出しました: " + detectedCode);
@@ -116,60 +135,3 @@ function QuaggaJS() {
         // 例: fetch('/api/product/' + detectedCode).then(...)
     });
 }
-
-
-// 現在はコメントアウトされている登録ボタンの処理（必要に応じて実装）
-// function Submit() {
-//     const itemName = document.getElementById('item-name').value;
-//     const kigen = document.getElementById('kigen').value;
-//     if (itemName && kigen) {
-//         const listItem = document.createElement('li');
-//         listItem.textContent = `${itemName} -- ${kigen}`;
-//         document.getElementById('add').appendChild(listItem);
-//         // フォームをクリア
-//         document.getElementById('item-name').value = '';
-//         document.getElementById('kigen').value = '';
-//     } else {
-//         alert('商品名と期限を入力してください。');
-//     }
-// }
-
-
-// ボタン押したらスタート
-/*  function QuaggaReset() {
-  Quagga.init({
-    inputStream: {
-      name: "Live",
-      type: "LiveStream",
-      target: document.querySelector('#canvas'),
-      constraints: {
-        facingMode: "environment"
-      },
-      area: {
-        top: "40%", right: "10%", left: "10%", bottom: "40%"
-      }
-    },
-    decoder: {
-      readers: ["ean_reader", "ean_8_reader"]
-    }
-  }, function(err) {
-    if (err) {
-      alert("カメラを開けませんでした: " + err);
-      return;
-    }
-    Quagga.start();
-    console.log(" Quagga started!");
-
-    // 検出イベントはinitの中で1回だけ設定
-    Quagga.onDetected(function(result) {
-      const code = result.codeResult.code;
-      alert("読み取ったコード: " + code);
-      document.getElementById("item-name").value = code;
-      Quagga.stop();
-    });
-  });
-}
-
-function QuaggaJS() {
-  QuaggaReset(); // ← initもstartも含めて実行
-} */
