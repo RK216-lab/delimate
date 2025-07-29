@@ -1,30 +1,9 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBR_tS9B2FcQLsDU2Mbiezj29lhiijgkNQ",
-  authDomain: "delimate-rk.firebaseapp.com",
-  projectId: "delimate-rk",
-  storageBucket: "delimate-rk.firebasestorage.app",
-  messagingSenderId: "698442193271",
-  appId: "1:698442193271:web:678b118002a66b3ec8a972",
-  measurementId: "G-91G80CMZG3"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 let item;
 let date;
 let list;
 
-    var i = 0
-var all = ["商品名--期限"]
+var i = 0
+// var all = ["商品名--期限"]
 function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
@@ -54,14 +33,14 @@ function Delete(){
         ReWrite()
     }
 }
-function ReWrite(){
-    list = document.getElementById("list");
+/*function ReWrite(){
+    //list = document.getElementById("list");
     list.innerHTML = ["商品名--期限"]
        for (var n = 1; n <= all.length -1 ;n++){ 
         console.log(n) 
         list.innerHTML += "<br>" + `${all[n].name}` +"--" +`${all[n].date}` +"<button id='" + n + "' onclick='Delete()'>削除</button>"; 
     }
-}
+}*/
 // ページ読み込み時に初期化
 // バーコードリーダーを初期化・起動する関数
 function QuaggaJS() {
@@ -97,7 +76,7 @@ function QuaggaJS() {
         });
 
     // 処理中の映像に描画するイベントハンドラ
-    Quagga.onProcessed(function(result) {
+   /* Quagga.onProcessed(function(result) {
         var drawingCtx = Quagga.canvas.ctx.overlay;
         var drawingCanvas = Quagga.canvas.dom.overlay;
 
@@ -115,7 +94,7 @@ function QuaggaJS() {
                 });
             }
         }
-    });
+    });*/
 
     // バーコードを検出した際のイベントハンドラ
     Quagga.onDetected(function(result) {
@@ -140,12 +119,8 @@ function QuaggaJS() {
             .catch(err => alert("エラーが発生しました"))
             return;
         } else {
-            alert("再読み込みします。")
             location.reload();
+            return;
         }
-
-        // ここで検出したバーコード（detectedCode）を使って、
-        // 商品情報の検索や登録フォームへの自動入力などの次の処理を行います。
-        // 例: fetch('/api/product/' + detectedCode).then(...)
     });
 }

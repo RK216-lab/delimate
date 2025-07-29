@@ -11,10 +11,14 @@
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h2 id="midashi">食品登録</h2>
-        <div id = "container"></div>
-        <a id = "button" href="fill.html" ></a>
-        <a id="button" onclick="QuaggaJS()">バーコードを読み取る</a>
-        <a id="button" href="fill.html">手動で入力する</a>
+        <h2 id="midashi">食品情報入力</h2>
+        <form id = "fill">
+            <label for = "item-name">商品名</label>
+            <input id = "item-name" name = "item-name"><br>
+            <label><input type = "radio" name = "whichdate" value = 1>賞味期限</label>
+            <label><input type = "radio" name = "whichdate" value = 2>消費期限</label>
+            <input id = "kigen" type="date" name = "kigen">
+            <button type="submit" onclick = "Submit()" id = "button">確定する</button>
+        </form>
     </body>
 </html>
