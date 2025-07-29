@@ -9,6 +9,14 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+        <script>
+            document.addEventListener("DOMContentLoaded", () =>{
+            result = JSON.parse(localStorage.getItem("readResult"));
+            if (result && result.length !== 0) {
+                document.getElementById("item-name").value = result;
+            }
+            })
+        </script>
     </head>
     <body>
         <h2 id="midashi">食品情報入力</h2>

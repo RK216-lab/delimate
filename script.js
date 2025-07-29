@@ -8,7 +8,12 @@ var all = ["商品名--期限"]
 function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
-    const Judge = {name : item, date : date}
+    image = JSON.parse(localStorage.getItem("JAN"))
+    if (readResult = 0){
+        Judge = {img : "none", name : item, date : date}
+    }else{
+        Judge = {img : image, name : item, date : date}
+    }
     let inserted = false;
     for (let i = 0; i < all.length; i++) {
         if (new Date(date) < new Date(all[i].date)) {
@@ -22,30 +27,33 @@ function Submit(){
 }
 console.log(all)
 localStorage.setItem("list",JSON.stringify(all));
-location.href = "index.html"
-//ReWrite()
+location.href="index.html"
 }
 
 function Delete(){
+    all = JSON.parse(localStorage.getItem("list"));
     var e = e || window.event;
     var elem = e.target || e.srcElement;
     var elemID = elem.id;
     if (confirm("削除しますか？")){
         all.splice(elemID,1)
+        localStorage.setItem(JSON.parse("list",all));
         ReWrite()
     }
 }
 function ReWrite(){
-    //list = document.getElementById("list");
-    list.innerHTML = ["商品名--期限"]
+    all = JSON.parse(localStorage.getItem("list"));
+    list = document.getElementById("list");
+    list.innerHTML = ["画像--商品名--期限"]
        for (var n = 1; n <= all.length -1 ;n++){ 
         console.log(n) 
-        list.innerHTML += "<br>" + `${all[n].name}` +"--" +`${all[n].date}` +"<button id='" + n + "' onclick='Delete()'>削除</button>"; 
-    }
+        list.innerHTML += "<br><img src=https://image.jancodelookup.com/" + `${all[n].img}` + ".jpg>" + `${all[n].name}` +"--" +`${all[n].date}` +"<button id='" + n + "' onclick='Delete()'>削除</button>"; 
+        }
 }
 // ページ読み込み時に初期化
 // バーコードリーダーを初期化・起動する関数
 function QuaggaJS() {
+    localStorage.setItem("code","readResult")
     document.getElementById("disappear").style.display = "none"//ボタン邪魔
     // 既にQuaggaが動作している場合は、一度停止してから再初期化する
     if (Quagga.initialized) {
@@ -116,6 +124,7 @@ function QuaggaJS() {
                     const readResult = product.itemName;
                     alert(readResult)
                     localStorage.setItem("readResult",JSON.stringify(readResult))
+                    localStorage.setItem("JAN",detectedCode)
                     location.href = "fill.html"
                     return;
                     //alert(localStorage.getItem("readResult"))

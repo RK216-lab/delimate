@@ -10,11 +10,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
         <script>
             window.onload = () => {
-                all = JSON.parse(localStorage.getItem("list"))
-                readResult = JSON.parse(localStorage.getItem("JAN"));
+                readResult = JSON.parse(localStorage.getItem("list"));
                 console.log(readResult)
-                console.log(JSON.parse(localStorage.getItem("list")))
-                ReWrite()
             };
             </script>
     </head>
@@ -25,7 +22,7 @@
             <a id = "navigation" href = "report.html">レポート</a>
             <a id = "navigation" href = "game.html">ムダゼロクエスト</a>
         </ul>
-        <a id = "button" href = 'scan.html'>食品登録</a>
-        <p id = "list"></p>
+        <h2 id="midashi">食品リスト</h2>
+        <div>
     </body>
 </html>
