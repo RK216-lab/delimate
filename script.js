@@ -1,3 +1,4 @@
+console.log(localStorage.getItem("list".value))
 let item;
 let date;
 let list;
@@ -21,7 +22,8 @@ function Submit(){
         
 }
 console.log(all)
-ReWrite()
+localStorage.setItem("list",JSON.stringify(all));
+//ReWrite()
 }
 
 function Delete(){
@@ -110,8 +112,10 @@ function QuaggaJS() {
             .then(json => {
                 if (json.product && json.product.length > 0){
                     const product = json.product[0];
-                    alert(product.itemName);
-                    alert(product.makerName);
+                    const readResult = product.itemName;
+                    localStorage.setItem("readResult",readResult)
+                    const test =localStorage.getItem("readresult").value
+                    alert(test)
                 } else {
                     alert("商品が見つからなかったようです")
                 }
