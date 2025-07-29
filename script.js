@@ -1,10 +1,10 @@
-console.log(localStorage.getItem("list".value))
+
 let item;
 let date;
 let list;
 
 var i = 0
-// var all = ["商品名--期限"]
+var all = ["商品名--期限"]
 function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
@@ -18,11 +18,11 @@ function Submit(){
         }
     }
     if (!inserted) {
-        all.push(Judge);
-        
+        all.push(Judge);        
 }
 console.log(all)
 localStorage.setItem("list",JSON.stringify(all));
+location.href = "index.html"
 //ReWrite()
 }
 
@@ -35,17 +35,18 @@ function Delete(){
         ReWrite()
     }
 }
-/*function ReWrite(){
+function ReWrite(){
     //list = document.getElementById("list");
     list.innerHTML = ["商品名--期限"]
        for (var n = 1; n <= all.length -1 ;n++){ 
         console.log(n) 
         list.innerHTML += "<br>" + `${all[n].name}` +"--" +`${all[n].date}` +"<button id='" + n + "' onclick='Delete()'>削除</button>"; 
     }
-}*/
+}
 // ページ読み込み時に初期化
 // バーコードリーダーを初期化・起動する関数
 function QuaggaJS() {
+    document.getElementById("disappear").style.display = "none"//ボタン邪魔
     // 既にQuaggaが動作している場合は、一度停止してから再初期化する
     if (Quagga.initialized) {
         Quagga.stop();
@@ -113,9 +114,11 @@ function QuaggaJS() {
                 if (json.product && json.product.length > 0){
                     const product = json.product[0];
                     const readResult = product.itemName;
-                    localStorage.setItem("readResult",readResult)
-                    const test =localStorage.getItem("readresult").value
-                    alert(test)
+                    alert(readResult)
+                    localStorage.setItem("readResult",JSON.stringify(readResult))
+                    location.href = "fill.html"
+                    return;
+                    //alert(localStorage.getItem("readResult"))
                 } else {
                     alert("商品が見つからなかったようです")
                 }

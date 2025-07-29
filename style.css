@@ -48,3 +48,6 @@ nav{
   background-color: white;
   color: green;
 }
+#item-name{
+  width:80%;
+}
