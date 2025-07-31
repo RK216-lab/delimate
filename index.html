@@ -14,8 +14,11 @@
                 readResult = JSON.parse(localStorage.getItem("JAN"));
                 console.log(readResult)
                 console.log(JSON.parse(localStorage.getItem("list")))
-                ReWrite()
+                document.addEventListener("DOMContentLoaded", () =>{
+                ReWrite()   
+                })
             };
+            
             </script>
     </head>
     <body>

@@ -9,12 +9,23 @@ function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
     image = JSON.parse(localStorage.getItem("JAN"))
-    if (readResult = 0){
+     if (!item || !date) {
+        alert("商品名と期限の両方を入力してください。");
+        return;
+    }
+    if (!image){
         Judge = {img : "none", name : item, date : date}
     }else{
         Judge = {img : image, name : item, date : date}
     }
     let inserted = false;
+    all = JSON.parse(localStorage.getItem("list"));
+    if (!all){
+        all = [Judge];
+        localStorage.setItem("list",JSON.stringify(all));
+        location.href="index.html"
+        return;
+    }else{
     for (let i = 0; i < all.length; i++) {
         if (new Date(date) < new Date(all[i].date)) {
             all.splice(i, 0, Judge);
@@ -24,31 +35,65 @@ function Submit(){
     }
     if (!inserted) {
         all.push(Judge);        
-}
+}}
 console.log(all)
 localStorage.setItem("list",JSON.stringify(all));
 location.href="index.html"
 }
-
-function Delete(){
+function HandWriting(){
+    localStorage.removeItem("JAN")
+}
+function Delete(n){
     all = JSON.parse(localStorage.getItem("list"));
-    var e = e || window.event;
-    var elem = e.target || e.srcElement;
-    var elemID = elem.id;
     if (confirm("削除しますか？")){
-        all.splice(elemID,1)
-        localStorage.setItem(JSON.parse("list",all));
+        all.splice(n,1)
+        localStorage.setItem("list",JSON.stringify(all));
         ReWrite()
     }
 }
+
 function ReWrite(){
+    today = new Date()
     all = JSON.parse(localStorage.getItem("list"));
     list = document.getElementById("list");
-    list.innerHTML = ["画像--商品名--期限"]
-       for (var n = 1; n <= all.length -1 ;n++){ 
-        console.log(n) 
-        list.innerHTML += "<br><img src=https://image.jancodelookup.com/" + `${all[n].img}` + ".jpg>" + `${all[n].name}` +"--" +`${all[n].date}` +"<button id='" + n + "' onclick='Delete()'>削除</button>"; 
+    list.innerHTML = `
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tr>
+                <th>画像</th>
+                <th>商品名</th>
+                <th>期限</th>
+                <th>削除</th>
+            </tr>
+    `;
+
+    // データ行を追加
+    for (let n = 0; n < all.length; n++) {
+        console.log(all[n].date)
+        console.log(new Date (all[n].date) - today)
+        if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){
+            color = "#ff9e9e";
+        } else if (new Date (all[n].date) - today < 0){
+            color = "#ff9ecbff";
+        } else if (new Date (all[n].date) - today < 1000 * 60 * 60 * 24 * 3){
+            color = "#ffce9e";
+        }else if (new Date (all[n].date) - today < 1000 * 60 * 60 * 24 * 7){
+            color = "#ffff9e";
+        } else {
+            color = "#ceff9e"
         }
+        list.innerHTML += `
+            <tr style = background-color:${color}>
+                <td><img src="https://image.jancodelookup.com/${all[n].img}.jpg" width="100"></td>
+                <td>${all[n].name}</td>
+                <td>${all[n].date}</td>
+                <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+            </tr>
+        `;
+    }
+
+    // テーブルを閉じる
+    list.innerHTML += `</table>`;
+
 }
 // ページ読み込み時に初期化
 // バーコードリーダーを初期化・起動する関数
