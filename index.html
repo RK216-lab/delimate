@@ -14,21 +14,23 @@
                 readResult = JSON.parse(localStorage.getItem("JAN"));
                 console.log(readResult)
                 console.log(JSON.parse(localStorage.getItem("list")))
-                document.addEventListener("DOMContentLoaded", () =>{
-                ReWrite()   
-                })
             };
+            document.addEventListener("DOMContentLoaded", () =>{
+                SOS()
+        })
             
             </script>
     </head>
     <body>
         <h1><a id = "navigation" href="index.html">Delimate</a></h1>
         <ul>
+            <a id = "navigation" href = "login.html">ログイン</a>
             <a id = "navigation" href = "list.html">食品リスト</a>
             <a id = "navigation" href = "report.html">レポート</a>
             <a id = "navigation" href = "game.html">ムダゼロクエスト</a>
         </ul>
         <a id = "button" href = 'scan.html'>食品登録</a>
-        <p id = "list"></p>
+        <div id="BeCareful"></h2>
+        <table id =  "list" border="1" cellspacing="0" cellpadding="5"></table>
     </body>
 </html>

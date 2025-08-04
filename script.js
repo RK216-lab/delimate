@@ -5,18 +5,32 @@ let list;
 
 var i = 0
 var all = ["商品名--期限"]
+function loggedIn(){
+    firebase.auth().onAuthStateChanged(function(user) {
+  const userInfo = document.getElementById("user-info");
+  if (user) {
+    // ログインしている
+    userInfo.textContent = `こんにちは、${user.displayName || "ユーザー"} さん！`;
+  } else {
+    // ログインしていない
+    userInfo.textContent = "ログインしていません。";
+  }
+});
+}
+
 function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
+    recipe = document.getElementById("recipe").value
     image = JSON.parse(localStorage.getItem("JAN"))
      if (!item || !date) {
         alert("商品名と期限の両方を入力してください。");
         return;
     }
     if (!image){
-        Judge = {img : "none", name : item, date : date}
+        Judge = {img : "none", name : item, date : date, recipe : recipe}
     }else{
-        Judge = {img : image, name : item, date : date}
+        Judge = {img : image, name : item, date : date, recipe : recipe}
     }
     let inserted = false;
     all = JSON.parse(localStorage.getItem("list"));
@@ -49,6 +63,105 @@ function Delete(n){
         all.splice(n,1)
         localStorage.setItem("list",JSON.stringify(all));
         ReWrite()
+        location.reload()
+    }
+}
+function SOS(){
+    var expired = [];
+    var thisday = [];
+    var threeDays = [];
+    today = new Date()
+    all = JSON.parse(localStorage.getItem("list"));
+    list = document.getElementById("list");
+
+    // 仕分ける
+    for (let n = 0; n < all.length; n++) {
+        console.log(all[n].date)
+        console.log(new Date (all[n].date) - today)
+        if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
+            expired.push({img : all[n].img, name :all[n].name, date :all[n].date, recipe : all[n].recipe})
+        } else if (new Date (all[n].date) - today < 0){
+            thisday.push({img : all[n].img, name :all[n].name, date :all[n].date, recipe : all[n].recipe})
+        } else if (new Date (all[n].date) - today < 1000 * 60 * 60 * 24 * 3){
+            threeDays.push({img : all[n].img, name :all[n].name, date :all[n].date, recipe : all[n].recipe})
+        } else {
+            break;
+        }
+    }
+    //期限切れ
+    if (expired.length > 0){
+        list.innerHTML = `
+        <h2>期限が切れています</h2><br>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tr>
+                <th>画像</th>
+                <th>商品名</th>
+                <th>期限</th>
+                <th>削除</th>
+            </tr>
+    `;
+    for (n = 0; n < expired.length; n++){
+        list.innerHTML += `
+            <tr style = background-color:"#ff9e9e">
+                <td><img src="https://image.jancodelookup.com/${expired[n].img}.jpg" width="100"></td>
+                <td>${expired[n].name}</td>
+                <td>${expired[n].date}</td>
+                <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+            </tr>`
+        
+    }
+    // テーブルを閉じる
+    list.innerHTML += `</table>`;
+    }
+    //今日
+    if (today.length > 0){
+        list.innerHTML += `
+        <h2>今日が期限です</h2><br>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tr>
+                <th>画像</th>
+                <th>商品名</th>
+                <th>期限</th>
+                <th>削除</th>
+            </tr>
+    `;
+    for (n = 0; n < thisday.length; n++){
+        list.innerHTML += `
+            <tr style = background-color:"#ff9ecbff">
+                <td><img src="https://image.jancodelookup.com/${thisday[n].img}.jpg" width="100"></td>
+                <td>${thisday[n].name}</td>
+                <td>${thisday[n].date}</td>
+                <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+            </tr>`
+        
+    }
+    // テーブルを閉じる
+    list.innerHTML += `</table>`;
+    }
+    //3日以内
+    if (threeDays.length > 0){
+        list.innerHTML += `
+        <h2>期限が迫っています</h2><br>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tr>
+                <th>画像</th>
+                <th>商品名</th>
+                <th>期限</th>
+                <th>削除</th>
+            </tr>
+    `;
+    for (n = 0; n < threeDays.length; n++){
+        list.innerHTML += `
+            <tr style = background-color:"#ffce9e">
+                <td><img src="https://image.jancodelookup.com/${threeDays[n].img}.jpg" width="100"></td>
+                <td>${threeDays[n].name}</td>
+                <td>${threeDays[n].date}</td>
+                <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+            </tr>`
+        
+    }
+    // テーブルを閉じる
+    list.innerHTML += `</table>`;
     }
 }
 
