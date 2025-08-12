@@ -9,16 +9,14 @@ body {
   margin: 0;
   padding: 0;
   color: #333;
+  align-items: center;
+  text-align: center;
 }
 
 #container {
   max-width: 960px;
   margin: 0 auto;
   padding: 40px 20px;
-}
-
-div{
-  outline: #ffffff;
 }
 #button {
   color: #cc0070;
@@ -48,9 +46,9 @@ nav {
   display: flex;
   justify-content: center;
   gap: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-bottom: 4px solid #00c4cc;
   border-radius: 0 0 12px 12px;
+  margin-bottom: 50px;
 }
 
 .navigation {
@@ -78,14 +76,11 @@ table {
   border-spacing: 0;
   width: 100%;
   margin: 32px auto;
-  background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 td,th {
-  background-color: #ffffff;
   font-weight: 600;
   padding: 12px;
 }
