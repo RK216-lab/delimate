@@ -3,9 +3,22 @@
   font-weight: 400;
   font-style: normal;
 }
-body{
-    font-family: "Zen Kaku Gothic Antique";
-    background-color: white;
+body {
+  font-family: "Zen Kaku Gothic Antique", sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+#container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+div{
+  outline: #ffffff;
 }
 #button {
   display: inline-block;
@@ -37,29 +50,53 @@ body{
     background-color: white;
     padding-left: 50%;
 }
-nav{
-  background-color: beige;
+nav {
+  background: #ffffff;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 4px solid #00c4cc;
+  border-radius: 0 0 12px 12px;
 }
-#container {
-        width: 100%;
-        height: auto;
-    }
-#navigation { 
-  background-color: white;
-  color: green;
+
+.navigation {
+  color: #00c4cc;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  background-color: #e0ffff;
+  border: 2px solid #00c4cc;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
+
+.navigation:hover {
+  background-color: #00c4cc;
+  color: #ffffff;
+  box-shadow: 0 0 8px #00c4cc;
+}
+
 #item-name{
   width:80%;
 }
 table {
-  border-collapse: collapse;
-  width: 80%;
-  margin : 0 auto
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 32px auto;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-th, td {
-  text-align: center;
-  padding: 5px;
-  border: 3px solid #ffffff;
+
+td,th {
+  background-color: #ffffff;
+  font-weight: 600;
+  padding: 12px;
 }
 img {
   max-height: 80px;

@@ -5,18 +5,6 @@ let list;
 
 var i = 0
 var all = ["商品名--期限"]
-function loggedIn(){
-    firebase.auth().onAuthStateChanged(function(user) {
-  const userInfo = document.getElementById("user-info");
-  if (user) {
-    // ログインしている
-    userInfo.textContent = `こんにちは、${user.displayName || "ユーザー"} さん！`;
-  } else {
-    // ログインしていない
-    userInfo.textContent = "ログインしていません。";
-  }
-});
-}
 
 function Submit(){
     item = document.getElementById("item-name").value
@@ -66,6 +54,25 @@ function Delete(n){
         location.reload()
     }
 }
+function Use(n){
+    all = JSON.parse(localStorage.getItem("list"));
+    if (confirm("消費しましたか？")){
+        all.splice(n,1)
+        localStorage.setItem("list",JSON.stringify(all));
+        ReWrite()
+        location.reload()
+    }
+}
+function Trash(n){
+    all = JSON.parse(localStorage.getItem("list"));
+    if (confirm("廃棄しますか？")){
+        all.splice(n,1)
+        localStorage.setItem("list",JSON.stringify(all));
+        ReWrite()
+        location.reload()
+    }
+    alert("(´；ω；`)ｳｯ…");
+}
 function SOS(){
     var expired = [];
     var thisday = [];
@@ -97,7 +104,6 @@ function SOS(){
                 <th>画像</th>
                 <th>商品名</th>
                 <th>期限</th>
-                <th>削除</th>
             </tr>
     `;
     for (n = 0; n < expired.length; n++){
@@ -107,6 +113,8 @@ function SOS(){
                 <td>${expired[n].name}</td>
                 <td>${expired[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+                <td><button id = "button" onclick="Use(${n})">消費</button></td>
+                <td><button id = "button" onclick="Trash(${n})">廃棄</button></td>
             </tr>`
         
     }
@@ -114,7 +122,7 @@ function SOS(){
     list.innerHTML += `</table>`;
     }
     //今日
-    if (today.length > 0){
+    if (thisday.length > 0){
         list.innerHTML += `
         <h2>今日が期限です</h2><br>
         <table border="1" cellspacing="0" cellpadding="5">
@@ -122,7 +130,6 @@ function SOS(){
                 <th>画像</th>
                 <th>商品名</th>
                 <th>期限</th>
-                <th>削除</th>
             </tr>
     `;
     for (n = 0; n < thisday.length; n++){
@@ -132,6 +139,8 @@ function SOS(){
                 <td>${thisday[n].name}</td>
                 <td>${thisday[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+                <td><button id = "button" onclick="Use(${n})">消費</button></td>
+                <td><button id = "button" onclick="Trash(${n})">廃棄</button></td>
             </tr>`
         
     }
@@ -147,7 +156,6 @@ function SOS(){
                 <th>画像</th>
                 <th>商品名</th>
                 <th>期限</th>
-                <th>削除</th>
             </tr>
     `;
     for (n = 0; n < threeDays.length; n++){
@@ -157,13 +165,24 @@ function SOS(){
                 <td>${threeDays[n].name}</td>
                 <td>${threeDays[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+                <td><button id = "button" onclick="Use(${n})">消費</button></td>
+                <td><button id = "button" onclick="Trash(${n})">廃棄</button></td>
             </tr>`
         
     }
     // テーブルを閉じる
     list.innerHTML += `</table>`;
     }
+    let recipelist = "https://cse.google.com/cse?cx=30817d1f4b9a34c3f#gsc.tab=0&gsc.q=";
+    for (n = 0; n < thisday.length; n++){
+        recipelist += thisday[n].recipe
+        recipelist += "%E3%80%80"
+    }
+    recipelist += "&gsc.sort="
+    document.getElementById("recipe").innerHTML = `<a id = "button" href = ${recipelist}>レシピを見る</a>`
 }
+
+
 
 function ReWrite(){
     today = new Date()
@@ -175,7 +194,9 @@ function ReWrite(){
                 <th>画像</th>
                 <th>商品名</th>
                 <th>期限</th>
-                <th>削除</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
     `;
 
@@ -200,6 +221,8 @@ function ReWrite(){
                 <td>${all[n].name}</td>
                 <td>${all[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
+                <td><button id = "button" onclick="Use(${n})">消費</button></td>
+                <td><button id = "button" onclick="Trash(${n})">廃棄</button></td>
             </tr>
         `;
     }
