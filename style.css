@@ -21,30 +21,22 @@ div{
   outline: #ffffff;
 }
 #button {
-  display: inline-block;
-  padding: 10px 10px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
+  color: #cc0070;
   text-decoration: none;
-  background: linear-gradient(45deg, #ff6b6b, #f06595);
-  border: 2px solid #ff4757;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  background-color: #e0ffff;
+  border: 2px solid #cc0070;
   border-radius: 8px;
-  box-shadow: 0 4px #c0392b;
-  text-align: center;
   transition: all 0.2s ease;
 }
 
 #button:hover {
-  background: linear-gradient(45deg, #f06595, #ff6b6b);
-  box-shadow: 0 2px #c0392b;
-  transform: translateY(2px);
+  background-color: #cc0070;
+  color: #ffffff;
 }
 
-#button:active {
-  box-shadow: 0 0 #c0392b;
-  transform: translateY(4px);
-}
 
 #add{
     background-color: white;
@@ -76,7 +68,6 @@ nav {
 .navigation:hover {
   background-color: #00c4cc;
   color: #ffffff;
-  box-shadow: 0 0 8px #00c4cc;
 }
 
 #item-name{
