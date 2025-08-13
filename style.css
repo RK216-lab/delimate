@@ -12,6 +12,17 @@ body {
   align-items: center;
   text-align: center;
 }
+#navigation {
+  background-color: #ffffff;
+  color: #00c4cc;
+  border: none;
+  padding: 12px 12px;
+  border-radius: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 #container {
   max-width: 960px;

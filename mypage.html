@@ -8,20 +8,12 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
-        <script>
-            window.onload = () => {
-                all = JSON.parse(localStorage.getItem("list"))
-                readResult = JSON.parse(localStorage.getItem("JAN"));
-                console.log(readResult)
-                console.log(JSON.parse(localStorage.getItem("list")))
-            };
-            document.addEventListener("DOMContentLoaded", () =>{
-                SOS()
-                document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
-        })
-            
-            </script>
     </head>
+    <script>
+        document.addEventListener("DOMContentLoaded" , () => {
+            document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+        })
+    </script>
     <body>
         <h1><a id = "navigation" href="index.html">Delimate</a></h1>
         <h2 id = "point"></h2>
@@ -31,8 +23,5 @@
             <a class = "navigation" href = "report.html">レポート</a>
             <a class = "navigation" href = "game.html">ムダゼロクエスト</a>
         </nav>
-        <a id="button" href="scan.html">食品登録</a>
-        <table id =  "list" border="0" cellspacing="0" cellpadding="5"></table>
-        <div id = "recipe"></div>
     </body>
 </html>
