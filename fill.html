@@ -14,6 +14,7 @@
             result = JSON.parse(localStorage.getItem("readResult"));
             if (result && result.length !== 0) {
                 document.getElementById("item-name").value = result;
+                localStorage.removeItem("readResult")
             }
             })
         </script>
