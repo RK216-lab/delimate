@@ -2,6 +2,7 @@
 let item;
 let date;
 let list;
+let point;
 
 var i = 0
 var all = ["商品名--期限"]
@@ -37,10 +38,21 @@ function Submit(){
     }
     if (!inserted) {
         all.push(Judge);        
-}}
+}
+Point(1,"商品を登録した！")
+}
 console.log(all)
 localStorage.setItem("list",JSON.stringify(all));
 location.href="index.html"
+}
+function Point(n,m){
+    point = JSON.parse(localStorage.getItem("point")) + n;
+    localStorage.setItem("point",JSON.stringify(point))
+    if (n > 0){
+        alert(`${m}${n}ポイントゲット★現在${point}ポイント！`)
+    } else {
+        alert(`${m}${-n}ポイントを失った...現在${point}ポイント`)
+    }
 }
 function HandWriting(){
     localStorage.removeItem("JAN")
@@ -66,12 +78,14 @@ function Use(n){
 function Trash(n){
     all = JSON.parse(localStorage.getItem("list"));
     if (confirm("廃棄しますか？")){
+        away = all[n].name
         all.splice(n,1)
         localStorage.setItem("list",JSON.stringify(all));
         ReWrite()
+        Point(-5,"ばいばい" + away + "...(´；ω；`)ｳｯ")
         location.reload()
     }
-    alert("(´；ω；`)ｳｯ…");
+    
 }
 function SOS(){
     var expired = [];
