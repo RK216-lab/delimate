@@ -1,9 +1,19 @@
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+                console.error('Service Worker registration failed:', error);
+            });
+    });
+}
 
 let item;
 let date;
 let list;
 let point;
-
 var i = 0
 var all = ["商品名--期限"]
 
@@ -69,9 +79,11 @@ function Delete(n){
 function Use(n){
     all = JSON.parse(localStorage.getItem("list"));
     if (confirm("消費しましたか？")){
+        away = all[n].name
         all.splice(n,1)
         localStorage.setItem("list",JSON.stringify(all));
         ReWrite()
+        Point(3,away + "を消費(/・ω・)/!!")
         location.reload()
     }
 }
@@ -93,6 +105,9 @@ function SOS(){
     var threeDays = [];
     today = new Date()
     all = JSON.parse(localStorage.getItem("list"));
+    if (all === null){
+        all = []
+    }
     list = document.getElementById("list");
 
     // 仕分ける
@@ -188,20 +203,22 @@ function SOS(){
     list.innerHTML += `</table>`;
     }
     let recipelist = "https://cse.google.com/cse?cx=30817d1f4b9a34c3f#gsc.tab=0&gsc.q=";
-    for (n = 0; n < thisday.length; n++){
+    if (thisday.length === 0){
+        document.getElementById("recipe").innerHTML = `<a id = "button" href = ${recipelist}>レシピを検索する</a>`
+    } else {
+        for (n = 0; n < thisday.length; n++){
         recipelist += thisday[n].recipe
         recipelist += "%E3%80%80"
+        recipelist += "&gsc.sort="
+        document.getElementById("recipe").innerHTML = `<a id = "button" href = ${recipelist}>レシピを見る</a>`
     }
-    recipelist += "&gsc.sort="
-    document.getElementById("recipe").innerHTML = `<a id = "button" href = ${recipelist}>レシピを見る</a>`
 }
-
-
-
+}
 function ReWrite(){
     today = new Date()
     all = JSON.parse(localStorage.getItem("list"));
     list = document.getElementById("list");
+    if (all.length !== 0){
     list.innerHTML = `
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
@@ -243,31 +260,31 @@ function ReWrite(){
 
     // テーブルを閉じる
     list.innerHTML += `</table>`;
-
+}else{
+    list.innerHTML = `<h2>登録されている商品がありません。<br><a id="button" href="scan.html" style = "display: inline-block; margin-top: 50px;">食品登録</a>`
 }
-// ページ読み込み時に初期化
-// バーコードリーダーを初期化・起動する関数
+}
+// バーコードリーダー（QuaggaJS）関連
 function QuaggaJS() {
     localStorage.setItem("code","readResult")
     document.getElementById("disappear").style.display = "none"//ボタン邪魔
-    // 既にQuaggaが動作している場合は、一度停止してから再初期化する
     if (Quagga.initialized) {
         Quagga.stop();
         Quagga.initialized = false; // フラグをリセット
-        document.querySelector('#container').innerHTML = ''; // コンテナをクリア
+        document.querySelector('#container').innerHTML = ''; 
     }
 
-    // Quaggaの初期化
+    //初期化
     Quagga.init({
             inputStream: {
-                type: "LiveStream", // ライブストリーム（カメラ）を使用
-                target: document.querySelector('#container'), // カメラ映像を表示する要素
+                type: "LiveStream", // cameraを使用
+                target: document.querySelector('#container'), // 映す
                 constraints: {
-                    facingMode: "environment", // 背面カメラを使用
+                    facingMode: "environment", // 背面カメラ
                 }
             },
             decoder: {
-                readers: [ "ean_reader" ] // EAN (GTIN) バーコードを読み取る設定
+                readers: [ "ean_reader" ] // 日本の基本的なバーコード
             }
         },
         function(err) {
@@ -277,39 +294,17 @@ function QuaggaJS() {
                 return;
             }
             console.log("スキャン準備完了");
-            Quagga.start(); // 処理を開始
-            Quagga.initialized = true; // 初期化済み
+            Quagga.start(); 
+            Quagga.initialized = true; // 初期化できてますよ
         });
-
-    // 処理中の映像に描画するイベントハンドラ
-   /* Quagga.onProcessed(function(result) {
-        var drawingCtx = Quagga.canvas.ctx.overlay;
-        var drawingCanvas = Quagga.canvas.dom.overlay;
-
-        drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.width), parseInt(drawingCanvas.height));
-
-        if (result) {
-            if (result.box) {
-                // バーコードの位置に青い枠を描画
-                Quagga.ImageDebug.drawPath(result.box, {
-                    x: 0,
-                    y: 1
-                }, drawingCtx, {
-                    color: 'blue',
-                    lineWidth: 2
-                });
-            }
-        }
-    });*/
-
-    // バーコードを検出した際のイベントハンドラ
+    // 見つかったら
     Quagga.onDetected(function(result) {
         const detectedCode = result.codeResult.code;
         let codeReader = confirm (`認識コードは${detectedCode}で正しいですか？`)
         if (codeReader){
             Quagga.initialized = false; 
-            document.querySelector('#container').innerHTML = ''; // コンテナをクリア
-            document.querySelector('#container').style.display = 'none'; // 映像コンテナを非表示に
+            document.querySelector('#container').innerHTML = ''; 
+            document.querySelector('#container').style.display = 'none'; // 非表示に
             Quagga.stop()
             fetch(`https://api.jancodelookup.com/?appId=6807825cfc344aa8a9f9dfe96e3ae809&query=${detectedCode}&type=[code]`)
             .then(res => res.json())

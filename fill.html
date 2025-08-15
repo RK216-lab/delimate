@@ -23,13 +23,13 @@
         <h2 id="midashi">食品情報入力</h2>
         <form id = "fill">
             <label for = "item-name">商品名</label>
-            <input id = "item-name" name = "item-name"><br>
+            <input type="text" id = "item-name" name = "item-name" style = "display: inline-block; margin-top: 10px;"><br>
             <label for = "recipe">レシピ検索用の名前</label>
-            <input id = "recipe" name = "recipe"><br>
-            <label><input type = "radio" name = "whichdate" value = 1>賞味期限</label>
-            <label><input type = "radio" name = "whichdate" value = 2>消費期限</label>
-            <input id = "kigen" type="date" name = "kigen">
-            <a onclick = "Submit()" id = "button">確定する</button>
+            <input type="text" id = "recipe" name = "recipe" style = "display: inline-block; margin-top: 10px;"><br>
+            <label><input type = "radio" name = "whichdate" value = 1 style = "display: inline-block; margin-top: 10px;">賞味期限</label>
+            <label><input type = "radio" name = "whichdate" value = 2 style = "display: inline-block; margin-top: 10px;">消費期限</label>
+            <input id = "kigen" type="date" name = "kigen" style = "display: inline-block; margin-top: 10px;">
+            <a onclick = "Submit()" id = "button" style = "display: inline-block; margin-top: 10px;">確定する</a>
         </form>
     </body>
 </html>

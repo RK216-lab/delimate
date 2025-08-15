@@ -17,6 +17,9 @@
             };
             document.addEventListener("DOMContentLoaded", () =>{
                 SOS()
+                if (localStorage.getItem("point") === null){
+                    localStorage.setItem("point",0)
+                }
                 document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
         })
             

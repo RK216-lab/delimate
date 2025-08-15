@@ -10,7 +10,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
         <script>
         document.addEventListener("DOMContentLoaded" , () => {
-            document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+            if (localStorage.getItem("point") === null){
+                    localStorage.setItem("point",0)
+                }
+                document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
         })
     </script>
     </head>
