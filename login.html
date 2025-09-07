@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang = "ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>Delimate</title>
+        <script src="script.js"></script>
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="manifest" href="manifest.json">
+        <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+        <!--<script type="module">
+            import { db } from "./firebase.js";
+            import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+        </script>-->
+        <script>
+                    if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service_worker.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+            }
+                    document.addEventListener("DOMContentLoaded", () =>{
+                        if (localStorage.getItem("point") === null){
+                            localStorage.setItem("point",0)
+                        }
+                        document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+                })
+            
+                
+            </script>
+    </head>
+    <body>
+        <h1><a id = "navigation" href="index.html">Delimate</a></h1>
+        <h2 id = "point"></h2>
+        <nav>
+            <a class = "navigation" href = "mypage.html">マイページ</a>
+            <a class = "navigation" href = "list.html">食品リスト</a>
+            <a class = "navigation" href = "report.html">レポート</a>
+            <a class = "navigation" href = "game.html">ムダゼロクエスト</a>
+        </nav>
+        <h2>ログイン画面</h2>
+        <form id = "login">
+        <input id = "familycode" type="text"  placeholder="家族コード" style = "display: inline-block; margin-top: 10px;"><br>
+        <input id = "password" type = "text"  placeholder="パスワード" style = "display: inline-block; margin-top: 10px;"><br>
+        <a id="loginbtn">ログイン</a>
+        </form>
+    </body>
+</html>

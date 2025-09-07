@@ -6,14 +6,163 @@ let list;
 let point;
 var i = 0
 var all = ["商品名--期限"]
+function customAlert(message) {
+  return new Promise((resolve) => {
+    // オーバーレイ
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      top: "0", left: "0",
+      width: "100%", height: "100%",
+      background: "rgba(255,255,255,0.4)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: "9999"
+    });
 
-function Submit(){
+    // ダイアログボックス
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      backdropFilter: "blur(14px)",
+      background: "rgba(255, 255, 255, 0.6)",
+      border: "1px solid rgba(255, 255, 255, 0.8)",
+      borderRadius: "16px",
+      padding: "30px",
+      minWidth: "280px",
+      textAlign: "center",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+      color: "#333",
+      fontFamily: "sans-serif"
+    });
+
+    // アイコン
+    const icon = document.createElement("div");
+    icon.textContent = "⚠️";
+    icon.style.fontSize = "32px";
+    icon.style.marginBottom = "10px";
+
+    // メッセージ
+    const msg = document.createElement("p");
+    msg.textContent = message;
+    msg.style.marginBottom = "20px";
+    msg.style.fontSize = "16px";
+
+    // OKボタン
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "OK";
+    Object.assign(okBtn.style, {
+      padding: "10px 20px",
+      border: "none",
+      borderRadius: "8px",
+      background: "#3498db",
+      color: "#fff",
+      cursor: "pointer"
+    });
+
+    okBtn.onclick = () => {
+      document.body.removeChild(overlay);
+      resolve(); // ここで待機を解除
+    };
+
+    // 組み立て
+    box.appendChild(icon);
+    box.appendChild(msg);
+    box.appendChild(okBtn);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  });
+}
+function customConfirm(message) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      top: "0", left: "0",
+      width: "100%", height: "100%",
+      background: "rgba(255,255,255,0.4)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: "9999"
+    });
+
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      backdropFilter: "blur(14px)",
+      background: "rgba(255, 255, 255, 0.6)",
+      border: "1px solid rgba(255, 255, 255, 0.8)",
+      borderRadius: "16px",
+      padding: "30px",
+      minWidth: "280px",
+      textAlign: "center",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+      color: "#333",
+      fontFamily: "sans-serif"
+    });
+
+    const icon = document.createElement("div");
+    icon.textContent = "❓";
+    icon.style.fontSize = "32px";
+    icon.style.marginBottom = "10px";
+
+    const msg = document.createElement("p");
+    msg.textContent = message;
+    msg.style.marginBottom = "20px";
+    msg.style.fontSize = "16px";
+
+    const btnArea = document.createElement("div");
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "キャンセル";
+    Object.assign(cancelBtn.style, {
+      padding: "10px 20px",
+      marginRight: "10px",
+      border: "none",
+      borderRadius: "8px",
+      background: "#eee",
+      color: "#333",
+      cursor: "pointer"
+    });
+
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "OK";
+    Object.assign(okBtn.style, {
+      padding: "10px 20px",
+      border: "none",
+      borderRadius: "8px",
+      background: "#4CAF50",
+      color: "#fff",
+      cursor: "pointer"
+    });
+
+    cancelBtn.onclick = () => {
+      document.body.removeChild(overlay);
+      resolve(false);
+    };
+
+    okBtn.onclick = () => {
+      document.body.removeChild(overlay);
+      resolve(true);
+    };
+
+    btnArea.appendChild(cancelBtn);
+    btnArea.appendChild(okBtn);
+    box.appendChild(icon);
+    box.appendChild(msg);
+    box.appendChild(btnArea);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  });
+}
+
+async function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
     recipe = document.getElementById("recipe").value
     image = JSON.parse(localStorage.getItem("JAN"))
-     if (!item || !date) {
-        alert("商品名と期限の両方を入力してください。");
+     if (!item || !date ) {
+        customAlert("商品名と期限を入力してください。");
         return;
     }
     if (!image){
@@ -26,7 +175,6 @@ function Submit(){
     if (!all){
         all = [Judge];
         localStorage.setItem("list",JSON.stringify(all));
-        location.href="index.html"
         return;
     }else{
     for (let i = 0; i < all.length; i++) {
@@ -38,57 +186,65 @@ function Submit(){
     }
     if (!inserted) {
         all.push(Judge);        
-}
-Point(1,"商品を登録した！")
-}
-console.log(all)
-localStorage.setItem("list",JSON.stringify(all));
-location.href="index.html"
-}
-function Point(n,m){
-    point = JSON.parse(localStorage.getItem("point")) + n;
-    localStorage.setItem("point",JSON.stringify(point))
-    if (n > 0){
-        alert(`${m}${n}ポイントゲット★現在${point}ポイント！`)
-    } else {
-        alert(`${m}${-n}ポイントを失った...現在${point}ポイント`)
     }
 }
+localStorage.setItem("list",JSON.stringify(all));
+await Point(1,"商品を登録した！"); 
+location.href = "index.html"; // OK押した後に遷移
+}
+async function Point(n, m) {
+  point = JSON.parse(localStorage.getItem("point")) + n;
+  if (point < 0){
+    await customAlert(`${m}${-n}ポイント失うはずだったけど、マイナスになっちゃうと悲しいから０ポイントにしておくね！`);
+    point = 0;
+  } else if (n > 0) {
+    await customAlert(`${m}${n}ポイントゲット★現在${point}ポイント！`);
+  } else {
+    await customAlert(`${m}${-n}ポイントを失った...現在${point}ポイント`);
+  }
+  localStorage.setItem("point", JSON.stringify(point));
+}
+
+
 function HandWriting(){
     localStorage.removeItem("JAN")
 }
-function Delete(n){
-    all = JSON.parse(localStorage.getItem("list"));
-    if (confirm("削除しますか？")){
-        all.splice(n,1)
-        localStorage.setItem("list",JSON.stringify(all));
-        ReWrite()
-        location.reload()
-    }
+async function Delete(n) {
+  all = JSON.parse(localStorage.getItem("list"));
+  const result = await customConfirm("本当に削除しますか？");
+  if (result) {
+    all.splice(n, 1);
+    localStorage.setItem("list", JSON.stringify(all));
+    ReWrite();
+    location.reload();
+  }
 }
-function Use(n){
-    all = JSON.parse(localStorage.getItem("list"));
-    if (confirm("消費しましたか？")){
-        away = all[n].name
-        all.splice(n,1)
-        localStorage.setItem("list",JSON.stringify(all));
-        ReWrite()
-        Point(3,away + "を消費(/・ω・)/!!")
-        location.reload()
-    }
+async function Use(n) {
+  all = JSON.parse(localStorage.getItem("list"));
+  const result = await customConfirm("消費しましたか？");
+  if (result) {
+    const away = all[n].name;
+    all.splice(n, 1);
+    localStorage.setItem("list", JSON.stringify(all));
+    ReWrite();
+    await Point(3, away + "を消費(/・ω・)/!!"); // OK押すまで待機
+    location.reload();
+  }
 }
-function Trash(n){
-    all = JSON.parse(localStorage.getItem("list"));
-    if (confirm("廃棄しますか？")){
-        away = all[n].name
-        all.splice(n,1)
-        localStorage.setItem("list",JSON.stringify(all));
-        ReWrite()
-        Point(-5,"ばいばい" + away + "...(´；ω；`)ｳｯ")
-        location.reload()
-    }
-    
+
+async function Trash(n) {
+  all = JSON.parse(localStorage.getItem("list"));
+  const result = await customConfirm("廃棄しますか？");
+  if (result) {
+    const away = all[n].name;
+    all.splice(n, 1);
+    localStorage.setItem("list", JSON.stringify(all));
+    ReWrite();
+    await Point(-5, "ばいばい" + away + "...(´；ω；`)ｳｯ"); // OK押すまで待機
+    location.reload();
+  }
 }
+
 function SOS(){
     var expired = [];
     var thisday = [];
@@ -279,7 +435,7 @@ function QuaggaJS() {
         },
         function(err) {
             if (err) {
-                alert("カメラの起動に失敗しました。カメラへのアクセスを許可しているか、別のアプリで使用中でないか確認してください。")
+                customAlert("カメラの起動に失敗しました。カメラへのアクセスを許可しているか、別のアプリで使用中でないか確認してください。")
                 document.querySelector('#container').style.display = 'none'; // エラー時は映像コンテナを非表示に
                 return;
             }
@@ -302,17 +458,16 @@ function QuaggaJS() {
                 if (json.product && json.product.length > 0){
                     const product = json.product[0];
                     const readResult = product.itemName;
-                    alert(readResult)
                     localStorage.setItem("readResult",JSON.stringify(readResult))
                     localStorage.setItem("JAN",detectedCode)
                     location.href = "fill.html"
                     return;
-                    //alert(localStorage.getItem("readResult"))
+                    //customAlert(localStorage.getItem("readResult"))
                 } else {
-                    alert("商品が見つからなかったようです")
+                    customAlert("商品が見つからなかったようです")
                 }
             })
-            .catch(err => alert("エラーが発生しました"))
+            .catch(err => customAlert("エラーが発生しました"))
             return;
         } else {
             location.reload();
