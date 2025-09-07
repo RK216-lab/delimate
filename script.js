@@ -6,7 +6,8 @@ let list;
 let point;
 var i = 0
 var all = ["商品名--期限"]
-function customAlert(message) {
+
+function customAlert(message,a) {
   return new Promise((resolve) => {
     // オーバーレイ
     const overlay = document.createElement("div");
@@ -38,7 +39,7 @@ function customAlert(message) {
 
     // アイコン
     const icon = document.createElement("div");
-    icon.textContent = "⚠️";
+    icon.textContent = a;
     icon.style.fontSize = "32px";
     icon.style.marginBottom = "10px";
 
@@ -155,14 +156,13 @@ function customConfirm(message) {
     document.body.appendChild(overlay);
   });
 }
-
 async function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
     recipe = document.getElementById("recipe").value
     image = JSON.parse(localStorage.getItem("JAN"))
      if (!item || !date ) {
-        customAlert("商品名と期限を入力してください。");
+        customAlert("商品名と期限を入力してください。","⚠️");
         return;
     }
     if (!image){
@@ -195,12 +195,12 @@ location.href = "index.html"; // OK押した後に遷移
 async function Point(n, m) {
   point = JSON.parse(localStorage.getItem("point")) + n;
   if (point < 0){
-    await customAlert(`${m}${-n}ポイント失うはずだったけど、マイナスになっちゃうと悲しいから０ポイントにしておくね！`);
+    await customAlert(`${m}${-n}ポイント失うはずだったけど、マイナスになっちゃうから0ポイントにしておいたよ！`,"🍀");
     point = 0;
   } else if (n > 0) {
-    await customAlert(`${m}${n}ポイントゲット★現在${point}ポイント！`);
+    await customAlert(`${m}${n}ポイントゲット★現在${point}ポイント！`,"🌟");
   } else {
-    await customAlert(`${m}${-n}ポイントを失った...現在${point}ポイント`);
+    await customAlert(`${m}${-n}ポイントを失った...現在${point}ポイント`,"🌀");
   }
   localStorage.setItem("point", JSON.stringify(point));
 }
@@ -435,7 +435,7 @@ function QuaggaJS() {
         },
         function(err) {
             if (err) {
-                customAlert("カメラの起動に失敗しました。カメラへのアクセスを許可しているか、別のアプリで使用中でないか確認してください。")
+                customAlert("カメラの起動に失敗しました。カメラへのアクセスを許可しているか、別のアプリで使用中でないか確認してください。","📷")
                 document.querySelector('#container').style.display = 'none'; // エラー時は映像コンテナを非表示に
                 return;
             }
@@ -464,10 +464,10 @@ function QuaggaJS() {
                     return;
                     //customAlert(localStorage.getItem("readResult"))
                 } else {
-                    customAlert("商品が見つからなかったようです")
+                    customAlert("商品が見つからなかったようです","🍽️")
                 }
             })
-            .catch(err => customAlert("エラーが発生しました"))
+            .catch(err => customAlert("エラーが発生しました","💥"))
             return;
         } else {
             location.reload();

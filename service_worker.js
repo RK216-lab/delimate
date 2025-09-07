@@ -25,3 +25,10 @@ self.addEventListener('fetch', function(event) {
             })
     );
 });
+
+self.addEventListener("message", (event) => {
+  const { title, body, delay } = event.data;
+  setTimeout(() => {
+    self.registration.showNotification(title, { body });
+  }, delay);
+});
