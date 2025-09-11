@@ -204,8 +204,6 @@ async function Point(n, m) {
   }
   localStorage.setItem("point", JSON.stringify(point));
 }
-
-
 function HandWriting(){
     localStorage.removeItem("JAN")
 }
@@ -223,28 +221,45 @@ async function Use(n) {
   all = JSON.parse(localStorage.getItem("list"));
   const result = await customConfirm("消費しましたか？");
   if (result) {
+    localStorage.setItem("used",JSON.parse(localStorage.getItem("used"))+1)
+    today = new Date()
     const away = all[n].name;
+    ReWrite();
+    if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
+        localStorage.setItem("ex-used",JSON.parse(localStorage.getItem("used"))+1)  
+        await Point(3, away + "を消費(/・ω・)/期限切れちゃったけど捨てないでくれてありがとう💕"); // OK押すまで待機
+    } else if (new Date (all[n].date) - today < 0){
+        localStorage.setItem("td-used",JSON.parse(localStorage.getItem("used"))+1)  
+        await Point(3, away + "を消費(/・ω・)/今日が期限だったね！セーフ～"); // OK押すまで待機
+    } else {
+        localStorage.setItem("af-used",JSON.parse(localStorage.getItem("used"))+1)    
+        await Point(3, away + "を消費(/・ω・)/!!余裕もって消費できたね☆"); // OK押すまで待機
+    }
     all.splice(n, 1);
     localStorage.setItem("list", JSON.stringify(all));
-    ReWrite();
-    await Point(3, away + "を消費(/・ω・)/!!"); // OK押すまで待機
     location.reload();
   }
 }
-
 async function Trash(n) {
   all = JSON.parse(localStorage.getItem("list"));
   const result = await customConfirm("廃棄しますか？");
   if (result) {
+    localStorage.setItem("used",JSON.parse(localStorage.getItem("trash"))+1)
+    today = new Date()
     const away = all[n].name;
+    ReWrite();
+    if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
+        localStorage.setItem("ex-trash",JSON.parse(localStorage.getItem("used"))+1)  
+        await Point(-5, away + "の期限切れちゃってたね...これからは期限をしっかり確認しよう！"); // OK押すまで待機
+    } else {
+        localStorage.setItem("af-used",JSON.parse(localStorage.getItem("used"))+1)    
+        await Point(-5,  away + "捨てちゃったの...期限切れてないよ(´；ω；`)"); // OK押すまで待機
+    }
     all.splice(n, 1);
     localStorage.setItem("list", JSON.stringify(all));
-    ReWrite();
-    await Point(-5, "ばいばい" + away + "...(´；ω；`)ｳｯ"); // OK押すまで待機
     location.reload();
   }
 }
-
 function SOS(){
     var expired = [];
     var thisday = [];
