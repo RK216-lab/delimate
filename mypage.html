@@ -11,9 +11,10 @@
     </head>
     <script>
         document.addEventListener("DOMContentLoaded" , () => {
-            if (localStorage.getItem("point") === null){
-                    localStorage.setItem("point",0)
-                }
+            if (localStorage.getItem("point") === null) {
+    localStorage.setItem("point", JSON.stringify(0));
+}
+
                 document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
         })
     </script>

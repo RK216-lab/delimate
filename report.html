@@ -10,10 +10,13 @@
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
         <script>
         document.addEventListener("DOMContentLoaded" , () => {
-            if (localStorage.getItem("point") === null){
-                    localStorage.setItem("point",0)
-                }
+            if (localStorage.getItem("point") === null) {
+    localStorage.setItem("point", JSON.stringify(0));
+}
+
                 document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+                report("used","通算消費食品数","left")
+                report("trash","通算廃棄食品数","right")
         })
     </script>
     </head>
@@ -26,5 +29,15 @@
             <a class = "navigation" href = "report.html">レポート</a>
             <a class = "navigation" href = "game.html">ムダゼロクエスト</a>
         </nav>
+        <div id="report-container">
+  <div id="left" class="report-box">
+    <h1>😆</h1>
+  </div>
+  <div id="right" class="report-box">
+    <h1>😢</h1>
+  </div>
+
+</div>
+
     </body>
 </html>

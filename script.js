@@ -6,7 +6,64 @@ let list;
 let point;
 var i = 0
 var all = ["商品名--期限"]
+function report(kind, m,posi) {
+  const data = JSON.parse(localStorage.getItem(kind)) || [];
+  const now = new Date();
+  const fiveDaysAgo = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000); // 5日
+  const recentItems = data.filter(entry => {
+    const entryDate = new Date(entry.time);
+    return entryDate >= fiveDaysAgo;
+  });
+  const listHTML = recentItems.map(entry => {
+    const date = new Date(entry.time);
+    const formatted = date.toLocaleString('ja-JP', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit'
+    });//日付表示直す
+    return`<tr>
+        <td>${entry.name}</td>
+        <td>${formatted}</td>
+    </tr>`;}).join('');
+  document.getElementById(posi).innerHTML += `
+    <div class="report-box">
+    <h2>${m}:${data.length}個</h2>
+    <h2>(直近5日で${recentItems.length}個↓)</h2>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>商品名</th>
+            <th>日時</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${listHTML || "<tr><td colspan='2'>直近5日では該当なし</td></tr>"}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+function giveLoginBonus() {
+ const today = new Date().toDateString();
+  if (localStorage.getItem("lastLogin") !== today) {
+    localStorage.setItem("point", JSON.stringify(point));
+    localStorage.setItem("lastLogin", today);
+    Point(1,"ログインボーナス!!今日もDelimateを使ってくれてありがとう🌟");
+  }
+}
 
+function record(item,kind) {
+    rectime = new Date()
+    rectime = rectime.toString()
+    his = JSON.parse(localStorage.getItem(kind)) || []
+        if (!Array.isArray(his)) {
+            his = [];
+        }
+        his.push({
+            name: item,
+            time: rectime  // ミリ秒
+        });
+    localStorage.setItem(kind, JSON.stringify(his));
+}
 function customAlert(message,a) {
   return new Promise((resolve) => {
     // オーバーレイ
@@ -63,7 +120,7 @@ function customAlert(message,a) {
 
     okBtn.onclick = () => {
       document.body.removeChild(overlay);
-      resolve(); // ここで待機を解除
+      resolve(); // 待機おわり
     };
 
     // 組み立て
@@ -75,6 +132,7 @@ function customAlert(message,a) {
   });
 }
 function customConfirm(message) {
+    //きほんcustomAlertみたいなかんじ
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
     Object.assign(overlay.style, {
@@ -221,18 +279,18 @@ async function Use(n) {
   all = JSON.parse(localStorage.getItem("list"));
   const result = await customConfirm("消費しましたか？");
   if (result) {
-    localStorage.setItem("used",JSON.parse(localStorage.getItem("used"))+1)
-    today = new Date()
     const away = all[n].name;
+    record(away,"used") 
+    today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        localStorage.setItem("ex-used",JSON.parse(localStorage.getItem("used"))+1)  
+        record(away,"ex-used")  
         await Point(3, away + "を消費(/・ω・)/期限切れちゃったけど捨てないでくれてありがとう💕"); // OK押すまで待機
     } else if (new Date (all[n].date) - today < 0){
-        localStorage.setItem("td-used",JSON.parse(localStorage.getItem("used"))+1)  
+        record(away,"td-used") 
         await Point(3, away + "を消費(/・ω・)/今日が期限だったね！セーフ～"); // OK押すまで待機
     } else {
-        localStorage.setItem("af-used",JSON.parse(localStorage.getItem("used"))+1)    
+        record(away,"af-used")     
         await Point(3, away + "を消費(/・ω・)/!!余裕もって消費できたね☆"); // OK押すまで待機
     }
     all.splice(n, 1);
@@ -244,15 +302,15 @@ async function Trash(n) {
   all = JSON.parse(localStorage.getItem("list"));
   const result = await customConfirm("廃棄しますか？");
   if (result) {
-    localStorage.setItem("used",JSON.parse(localStorage.getItem("trash"))+1)
-    today = new Date()
     const away = all[n].name;
+    record(away,"trash") 
+    today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        localStorage.setItem("ex-trash",JSON.parse(localStorage.getItem("used"))+1)  
+        record(away,"ex-trash") 
         await Point(-5, away + "の期限切れちゃってたね...これからは期限をしっかり確認しよう！"); // OK押すまで待機
     } else {
-        localStorage.setItem("af-used",JSON.parse(localStorage.getItem("used"))+1)    
+        record(away,"af-trash") 
         await Point(-5,  away + "捨てちゃったの...期限切れてないよ(´；ω；`)"); // OK押すまで待機
     }
     all.splice(n, 1);
@@ -288,7 +346,7 @@ function SOS(){
     //期限切れ
     if (expired.length > 0){
         list.innerHTML = `
-        <h2>期限が切れています</h2><br>
+        <h2>期限が切れています！！！</h2><br>
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
                 <th>画像</th>
@@ -314,7 +372,7 @@ function SOS(){
     //今日
     if (thisday.length > 0){
         list.innerHTML += `
-        <h2>今日が期限です</h2><br>
+        <h2>今日が期限です！！</h2><br>
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
                 <th>画像</th>
@@ -340,7 +398,7 @@ function SOS(){
     //3日以内
     if (threeDays.length > 0){
         list.innerHTML += `
-        <h2>期限が迫っています</h2><br>
+        <h2>期限が迫っています！</h2><br>
         <table border="1" cellspacing="0" cellpadding="5">
             <tr>
                 <th>画像</th>
@@ -364,16 +422,20 @@ function SOS(){
     list.innerHTML += `</table>`;
     }
     let recipelist = "https://cse.google.com/cse?cx=30817d1f4b9a34c3f#gsc.tab=0&gsc.q=";
-    if (thisday.length === 0){
-        document.getElementById("recipe").innerHTML = `<a id = "button" href = ${recipelist}>レシピを検索する</a>`
-    } else {
+    if (thisday.length !== 0){
         for (n = 0; n < thisday.length; n++){
         recipelist += thisday[n].recipe
         recipelist += "%E3%80%80"
-        recipelist += "&gsc.sort="
-        document.getElementById("recipe").innerHTML = `<a id = "button" href = ${recipelist}>レシピを見る</a>`
+        }
+        document.getElementById("recipe").innerHTML += `<a id = "button" href = ${recipelist}>今日が期限の食品のレシピを見る</a>`
     }
-}
+    if (threeDays.length !== 0){
+        for (n = 0; n < threeDays.length; n++){
+        recipelist += threeDays[n].recipe
+        recipelist += "%E3%80%80"
+        }
+        document.getElementById("recipe").innerHTML += `<br><br><a id = "button" href = ${recipelist}>3日以内が期限の食品のレシピを見る</a>`
+    }
 }
 function ReWrite(){
     today = new Date()
@@ -392,7 +454,7 @@ function ReWrite(){
             </tr>
     `;
 
-    // データ行を追加
+    // 増やす
     for (let n = 0; n < all.length; n++) {
         console.log(all[n].date)
         console.log(new Date (all[n].date) - today)
