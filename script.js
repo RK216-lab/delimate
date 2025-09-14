@@ -1,5 +1,9 @@
 
-
+let stored = localStorage.getItem("point");
+if (!stored || stored === "undefined") {
+  localStorage.setItem("point", JSON.stringify(0));
+  stored = "0";
+}
 let item;
 let date;
 let list;
@@ -43,11 +47,19 @@ function report(kind, m,posi) {
   `;
 }
 function giveLoginBonus() {
- const today = new Date().toDateString();
-  if (localStorage.getItem("lastLogin") !== today) {
+  const today = new Date().toDateString();
+
+  // pointの安全取得
+  let point = JSON.parse(localStorage.getItem("point") || "0");
+
+  let lastLogin = localStorage.getItem("lastLogin");
+  if (!lastLogin || lastLogin === "undefined" || lastLogin !== today) {
+    point += 1; // ボーナス加算
     localStorage.setItem("point", JSON.stringify(point));
     localStorage.setItem("lastLogin", today);
-    Point(1,"ログインボーナス!!今日もDelimateを使ってくれてありがとう🌟");
+
+    Point(1, "ログインボーナス!!今日もDelimateを使ってくれてありがとう🌟");
+    location.reload()
   }
 }
 
