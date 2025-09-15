@@ -16,8 +16,11 @@
         if (localStorage.getItem("point") === null) {
             localStorage.setItem("point", JSON.stringify(0));
         }
-        document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;          
-        if(Number(localStorage.getItem("stage") || 1) < 6){
+        document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+        if (localStorage.getItem("plant") === null) {
+           Select();
+           return;
+        } else if(Number(localStorage.getItem("stage") || 1) < 6){
             document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
         } else {
             stage = 6;
