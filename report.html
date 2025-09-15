@@ -8,15 +8,16 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
         <script>
         document.addEventListener("DOMContentLoaded" , () => {
-            if (localStorage.getItem("point") === null) {
-    localStorage.setItem("point", JSON.stringify(0));
-}
-
-                document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
-                report("used","通算消費食品数","left")
-                report("trash","通算廃棄食品数","right")
+          if (localStorage.getItem("point") === null) {
+          localStorage.setItem("point", JSON.stringify(0));
+        }
+            document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+            report("used","通算消費食品数","left")
+            report("trash","通算廃棄食品数","right")
+            updateSubReports();
         })
     </script>
     </head>
@@ -24,20 +25,21 @@
         <h1><a id = "navigation" href="index.html">Delimate</a></h1>
         <h2 id = "point"></h2>
         <nav>
-            <a class = "navigation" href = "mypage.html">マイページ</a>
-            <a class = "navigation" href = "list.html">食品リスト</a>
-            <a class = "navigation" href = "report.html">レポート</a>
-            <a class = "navigation" href = "game.html">ムダゼロクエスト</a>
+            <a class="navigation" href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+<a class="navigation" href="list.html"><i class="fas fa-list"></i> 食品リスト</a>
+<a class="navigation" href="report.html"><i class="fas fa-chart-bar"></i> レポート</a>
+<a class="navigation" href="game.html"><i class="fas fa-gamepad"></i> ムダゼロクエスト</a>
         </nav>
-        <div id="report-container">
-  <div id="left" class="report-box">
-    <h1>😆</h1>
-  </div>
-  <div id="right" class="report-box">
-    <h1>😢</h1>
-  </div>
-
+        <div id = "report-container">
+        <div id="left" class="report-box">
+  <h1>😆</h1>
+  <div class="sub-report" id="left-sub"></div>
 </div>
 
+<div id="right" class="report-box">
+  <h1>😢</h1>
+  <div class="sub-report" id="right-sub"></div>
+</div>
+</div>
     </body>
 </html>

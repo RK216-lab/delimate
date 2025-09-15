@@ -1,13 +1,12 @@
 
-let stored = localStorage.getItem("point");
-if (!stored || stored === "undefined") {
+let point = localStorage.getItem("point");
+if (!point || point === "undefined") {
   localStorage.setItem("point", JSON.stringify(0));
-  stored = "0";
+  point = "0";
 }
 let item;
 let date;
 let list;
-let point;
 var i = 0
 var all = ["商品名--期限"]
 function report(kind, m,posi) {
@@ -46,20 +45,35 @@ function report(kind, m,posi) {
     </div>
   `;
 }
-function giveLoginBonus() {
+function NantoZero(key) {
+    const num = Number(localStorage.getItem(key));
+    return isNaN(num) ? 0 : num;
+}
+function updateSubReports() {
+    const afUsed = NantoZero("af-used");
+    const tdUsed = NantoZero("td-used");
+    const exUsed = NantoZero("ex-used");
+    const afTrash = NantoZero("af-trash");
+    const exTrash = NantoZero("ex-trash");
+    document.getElementById("left-sub").innerHTML = `
+        <div>余裕あり: ${afUsed}</div>
+        <div>当日: ${tdUsed}</div>
+        <div>期限切後: ${exUsed}</div>
+    `;
+
+    document.getElementById("right-sub").innerHTML = `
+        <div>余裕あり: ${afTrash}</div>
+        <div>期限切後: ${exTrash}</div>
+    `;
+}
+
+async function giveLoginBonus() {
   const today = new Date().toDateString();
-
-  // pointの安全取得
-  let point = JSON.parse(localStorage.getItem("point") || "0");
-
   let lastLogin = localStorage.getItem("lastLogin");
   if (!lastLogin || lastLogin === "undefined" || lastLogin !== today) {
-    point += 1; // ボーナス加算
-    localStorage.setItem("point", JSON.stringify(point));
     localStorage.setItem("lastLogin", today);
-
-    Point(1, "ログインボーナス!!今日もDelimateを使ってくれてありがとう🌟");
-    location.reload()
+    await Point(1, "ログインボーナス!!今日もDelimateを使ってくれてありがとう🌟");
+    location.reload();
   }
 }
 
@@ -76,9 +90,8 @@ function record(item,kind) {
         });
     localStorage.setItem(kind, JSON.stringify(his));
 }
-function customAlert(message,a) {
+function customAlert(message, a) {
   return new Promise((resolve) => {
-    // オーバーレイ
     const overlay = document.createElement("div");
     Object.assign(overlay.style, {
       position: "fixed",
@@ -88,10 +101,11 @@ function customAlert(message,a) {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      zIndex: "9999"
+      zIndex: "9999",
+      opacity: "0",
+      transition: "opacity 0.3s ease"
     });
 
-    // ダイアログボックス
     const box = document.createElement("div");
     Object.assign(box.style, {
       backdropFilter: "blur(14px)",
@@ -103,22 +117,21 @@ function customAlert(message,a) {
       textAlign: "center",
       boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
       color: "#333",
-      fontFamily: "sans-serif"
+      fontFamily: "sans-serif",
+      transform: "scale(0.8)",
+      transition: "transform 0.3s ease"
     });
 
-    // アイコン
     const icon = document.createElement("div");
     icon.textContent = a;
     icon.style.fontSize = "32px";
     icon.style.marginBottom = "10px";
 
-    // メッセージ
     const msg = document.createElement("p");
     msg.textContent = message;
     msg.style.marginBottom = "20px";
     msg.style.fontSize = "16px";
 
-    // OKボタン
     const okBtn = document.createElement("button");
     okBtn.textContent = "OK";
     Object.assign(okBtn.style, {
@@ -131,20 +144,30 @@ function customAlert(message,a) {
     });
 
     okBtn.onclick = () => {
-      document.body.removeChild(overlay);
-      resolve(); // 待機おわり
+      // アニメーション
+      overlay.style.opacity = "0";
+      box.style.transform = "scale(0.8)";
+      setTimeout(() => {
+        document.body.removeChild(overlay);
+        resolve();
+      }, 300); // transition時間
     };
 
-    // 組み立て
     box.appendChild(icon);
     box.appendChild(msg);
     box.appendChild(okBtn);
     overlay.appendChild(box);
     document.body.appendChild(overlay);
+
+    // 登場
+    requestAnimationFrame(() => {
+      overlay.style.opacity = "1";
+      box.style.transform = "scale(1)";
+    });
   });
 }
+
 function customConfirm(message) {
-    //きほんcustomAlertみたいなかんじ
   return new Promise((resolve) => {
     const overlay = document.createElement("div");
     Object.assign(overlay.style, {
@@ -155,7 +178,9 @@ function customConfirm(message) {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      zIndex: "9999"
+      zIndex: "9999",
+      opacity: "0",
+      transition: "opacity 0.3s ease"
     });
 
     const box = document.createElement("div");
@@ -169,7 +194,9 @@ function customConfirm(message) {
       textAlign: "center",
       boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
       color: "#333",
-      fontFamily: "sans-serif"
+      fontFamily: "sans-serif",
+      transform: "scale(0.8)",
+      transition: "transform 0.3s ease"
     });
 
     const icon = document.createElement("div");
@@ -207,15 +234,18 @@ function customConfirm(message) {
       cursor: "pointer"
     });
 
-    cancelBtn.onclick = () => {
-      document.body.removeChild(overlay);
-      resolve(false);
+    // 消える
+    const closeWithAnimation = (result) => {
+      overlay.style.opacity = "0";
+      box.style.transform = "scale(0.8)";
+      setTimeout(() => {
+        document.body.removeChild(overlay);
+        resolve(result);
+      }, 300);
     };
 
-    okBtn.onclick = () => {
-      document.body.removeChild(overlay);
-      resolve(true);
-    };
+    cancelBtn.onclick = () => closeWithAnimation(false);
+    okBtn.onclick = () => closeWithAnimation(true);
 
     btnArea.appendChild(cancelBtn);
     btnArea.appendChild(okBtn);
@@ -224,8 +254,15 @@ function customConfirm(message) {
     box.appendChild(btnArea);
     overlay.appendChild(box);
     document.body.appendChild(overlay);
+
+    // 登場
+    requestAnimationFrame(() => {
+      overlay.style.opacity = "1";
+      box.style.transform = "scale(1)";
+    });
   });
 }
+
 async function Submit(){
     item = document.getElementById("item-name").value
     date = document.getElementById("kigen").value
@@ -263,7 +300,8 @@ await Point(1,"商品を登録した！");
 location.href = "index.html"; // OK押した後に遷移
 }
 async function Point(n, m) {
-  point = JSON.parse(localStorage.getItem("point")) + n;
+  point = JSON.parse(localStorage.getItem("point") || 0);
+  point = point + n;
   if (point < 0){
     await customAlert(`${m}${-n}ポイント失うはずだったけど、マイナスになっちゃうから0ポイントにしておいたよ！`,"🍀");
     point = 0;
@@ -369,7 +407,7 @@ function SOS(){
     for (n = 0; n < expired.length; n++){
         list.innerHTML += `
             <tr style = background-color:"#ff9e9e">
-                <td><img src="https://image.jancodelookup.com/${expired[n].img}.jpg" width="100"></td>
+                <td><img id = "itemimg" src="https://image.jancodelookup.com/${expired[n].img}.jpg" width="100"></td>
                 <td>${expired[n].name}</td>
                 <td>${expired[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
@@ -395,7 +433,7 @@ function SOS(){
     for (n = 0; n < thisday.length; n++){
         list.innerHTML += `
             <tr style = background-color:"#ff9ecbff">
-                <td><img src="https://image.jancodelookup.com/${thisday[n].img}.jpg" width="100"></td>
+                <td><img id = "itemimg" src="https://image.jancodelookup.com/${thisday[n].img}.jpg" width="100"></td>
                 <td>${thisday[n].name}</td>
                 <td>${thisday[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
@@ -421,7 +459,7 @@ function SOS(){
     for (n = 0; n < threeDays.length; n++){
         list.innerHTML += `
             <tr style = background-color:"#ffce9e">
-                <td><img src="https://image.jancodelookup.com/${threeDays[n].img}.jpg" width="100"></td>
+                <td><img id = "itemimg" src="https://image.jancodelookup.com/${threeDays[n].img}.jpg" width="100"></td>
                 <td>${threeDays[n].name}</td>
                 <td>${threeDays[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
@@ -483,7 +521,7 @@ function ReWrite(){
         }
         list.innerHTML += `
             <tr style = background-color:${color}>
-                <td><img src="https://image.jancodelookup.com/${all[n].img}.jpg" width="100"></td>
+                <td><img id = "itemimg" src="https://image.jancodelookup.com/${all[n].img}.jpg" width="100"></td>
                 <td>${all[n].name}</td>
                 <td>${all[n].date}</td>
                 <td><button id = "button" onclick="Delete(${n})">削除</button></td>
@@ -496,7 +534,7 @@ function ReWrite(){
     // テーブルを閉じる
     list.innerHTML += `</table>`;
 }else{
-    list.innerHTML = `<h2>登録されている商品がありません。<br><a id="button" href="scan.html" style = "display: inline-block; margin-top: 50px;">食品登録</a>`
+    list.innerHTML = `<h2>登録されている商品がありません。<br><a id="button" href="scan.html" style = "display: inline-block; margin-top: 50px;"><i class="fas fa-utensils"></i> 食品登録</a>`
 }
 }
 // バーコードリーダー（QuaggaJS）関連
@@ -534,33 +572,202 @@ function QuaggaJS() {
         });
     // 見つかったら
     Quagga.onDetected(function(result) {
-        const detectedCode = result.codeResult.code;
-        let codeReader = confirm (`認識コードは${detectedCode}で正しいですか？`)
-        if (codeReader){
-            Quagga.initialized = false; 
-            document.querySelector('#container').innerHTML = ''; 
-            document.querySelector('#container').style.display = 'none'; // 非表示に
-            Quagga.stop()
-            fetch(`https://api.jancodelookup.com/?appId=6807825cfc344aa8a9f9dfe96e3ae809&query=${detectedCode}&type=[code]`)
-            .then(res => res.json())
-            .then(json => {
-                if (json.product && json.product.length > 0){
-                    const product = json.product[0];
-                    const readResult = product.itemName;
-                    localStorage.setItem("readResult",JSON.stringify(readResult))
-                    localStorage.setItem("JAN",detectedCode)
-                    location.href = "fill.html"
-                    return;
-                    //customAlert(localStorage.getItem("readResult"))
-                } else {
-                    customAlert("商品が見つからなかったようです","🍽️")
-                }
-            })
-            .catch(err => customAlert("エラーが発生しました","💥"))
-            return;
-        } else {
-            location.reload();
-            return;
+    const detectedCode = result.codeResult.code;
+
+    const codeReader = confirm(`認識コードは${detectedCode}で正しいですか？`);
+    if (!codeReader) {
+        location.reload()
+    }
+
+    (async () => {
+        Quagga.initialized = false; 
+        document.querySelector('#container').innerHTML = ''; 
+        document.querySelector('#container').style.display = 'none';
+        Quagga.stop();
+
+        try {
+            const res = await fetch(`https://api.jancodelookup.com/?appId=6807825cfc344aa8a9f9dfe96e3ae809&query=${detectedCode}&type=[code]`);
+            const json = await res.json();
+
+            if (json.product && json.product.length > 0) {
+                const product = json.product[0];
+                const readResult = product.itemName;
+                localStorage.setItem("readResult", JSON.stringify(readResult));
+                localStorage.setItem("JAN", detectedCode);
+                location.href = "fill.html";
+            } else {
+                await customAlert("商品が見つからなかったようです", "🍽️");
+                location.href = "fill.html"
+            }
+        } catch(err) {
+            await customAlert("エラーが発生しました", "💥");
+            location.reload()
         }
-    });
+    })();
+});
+}
+
+//ゲーム
+let stage = Number(localStorage.getItem("stage") || 1);
+let progress = Number(localStorage.getItem("progress") || 0);
+
+function updateDisplay() {
+    document.getElementById("vege-img").src = `vege/${localStorage.getItem("plant")}/${stage}.png`;
+    document.getElementById("progress-bar").style.width = progress + "%";
+    document.getElementById("progress-text").textContent = `${progress} / 100`;
+    if (localStorage.getItem("point") === null) {
+      localStorage.setItem("point", JSON.stringify(0));
+    }
+    document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+}
+async function Water() {
+    if(point < 10){
+        await customAlert("ポイントが足りません","⚡");
+        return;
+    }
+    point -= 10;
+    progress += Math.floor(25/(stage*0.7));
+    await customAlert("10ポイント消費して水やりをしました！","🚿");
+    rainAnimation()
+    if(progress >= 100){
+        progress = 0;
+        stage++;
+        if(stage < 6){
+            await customAlert(`ステージアップ！ステージ${stage}へ`,"🌱");
+            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+        } else {
+            stage = 6;
+            progress = 100;
+            Confetti()
+            await customAlert(`収穫！完成`,"🥕");
+            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Select()"><i class="fa fa-shower"></i> 育てる植物を選ぶ</button>`  
+            const plantData = {
+                id: Date.now(),
+                type: localStorage.getItem("plant"),
+                harvestedAt: new Date().toISOString().split('T')[0],
+            };
+  Collection(plantData);
+        }
+    }
+    localStorage.setItem("stage", stage);
+    localStorage.setItem("progress", progress);
+    localStorage.setItem("point", point);
+    updateDisplay()
+}
+function rainAnimation() {
+  const container = document.getElementById('game-container');
+  const containerWidth = container.offsetWidth;
+  const containerHeight = container.offsetHeight;
+
+  for (let i = 0; i < 50; i++) {
+    const drop = document.createElement('i');
+    drop.className = 'fas fa-tint rain-drop';
+
+    // ランダムな位置・サイズ・遅延
+    drop.style.left = Math.random() * containerWidth + 'px';
+    drop.style.top = -30 + 'px'; // 上からスタート
+    drop.style.fontSize = (Math.random() * 10 + 10) + 'px';
+    drop.style.animationDelay = (Math.random()) + 's';
+
+    container.appendChild(drop);
+  }
+}
+async function Select() {
+    // 植物選択用のHTMLを表示
+    await customAlert("育てたい植物を選んでください","🌱");
+    document.getElementById("game-container").innerHTML = `
+        <div style="display:flex; gap:20px; justify-content:center; margin-top:20px;">
+            <div onclick="choosePlant('carrot')" style="cursor:pointer; text-align:center;">
+                <img id="vege-img" src="vege/carrot/6.png" style="width:100px;">
+                <div>ニンジン</div>
+            </div>
+            <div onclick="choosePlant('pumpkin')" style="cursor:pointer; text-align:center;">
+                <img id="vege-img" src="vege/pumpkin/6.png" style="width:100px;">
+                <div>カボチャ</div>
+            </div>
+        </div>
+    `;
+}
+
+// 選んだ植物で初期化
+async function choosePlant(plant) {
+  const result = await customConfirm("確定しますか？","❓")
+      if (!result){
+        return;
+      }
+    localStorage.setItem("plant", plant); // どの植物か保持
+    stage = 1;
+    progress = 0;
+    localStorage.setItem("stage", stage);
+    localStorage.setItem("progress", progress);
+    document.getElementById("game-container").innerHTML=`
+                <img id="vege-img" src="vege/${localStorage.getItem("plant")}/${stage}.png" alt="${plant}" style="width:150px;">
+                <div id="progress-container" style="width:200px; background:#ddd; border-radius:12px; margin:10px auto;">
+                <div id="progress-bar" style="height:20px; width:0%; background:linear-gradient(135deg,#ffb347,#ffcc33); border-radius:12px;"></div></div>
+            <p id="progress-text">0 / 100</p>
+            <div id = "button"><div id = "grow-btn"></div></div>
+            <p id="point-display"></p>
+    `
+    // 水やりボタンを復活
+    document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+}
+
+const colors = [
+  '#ff1744', 
+  '#f50057', 
+  '#d500f9', 
+  '#651fff', 
+  '#00e5ff', 
+  '#1de9b6', 
+  '#76ff03', 
+  '#ffea00', 
+  '#ff9100',
+  '#ff3d00'
+];
+const icons = [
+  'fa-star', 'fa-circle', 'fa-snowflake', 'fa-heart', 'fa-sparkles'
+];
+function Confetti() {
+  const container = document.getElementById('game-container');
+
+  for (let i = 0; i < 60; i++) {
+    const sparkle = document.createElement('i');
+
+    const icon = icons[Math.floor(Math.random() * icons.length)];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+
+    sparkle.className = `fas ${icon} confetti`;
+    sparkle.style.left = Math.random() * container.offsetWidth + 'px';
+    sparkle.style.top = Math.random() * 50 + 'px';
+    sparkle.style.fontSize = (Math.random() * 12 + 14) + 'px';
+    sparkle.style.color = color;
+
+    container.appendChild(sparkle);
+  }
+
+  setTimeout(() => {
+    container.querySelectorAll('.confetti').forEach(el => el.remove());
+  }, 3000);
+}
+function Collection(data) {
+  const collection = JSON.parse(localStorage.getItem("myPlants")) || [];
+  collection.push(data);
+  localStorage.setItem("myPlants", JSON.stringify(collection));
+}
+function renderMyPage() {
+  const container = document.getElementById("mypage");
+  container.innerHTML = "";
+
+  const collection = JSON.parse(localStorage.getItem("myPlants")) || [];
+
+  collection.forEach(plant => {
+    const card = document.createElement("div");
+    card.className = "plant-card";
+    card.innerHTML = `
+      <h3>${plant.type}</h3>
+      <p>収穫日: ${plant.harvestedAt}</p>
+      <p>${plant.note}</p>
+    `;
+    container.appendChild(card);
+  });
 }

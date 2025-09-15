@@ -9,6 +9,8 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="manifest" href="manifest.json">
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
         <script>
             if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service_worker.js').then(function(registration) {
@@ -38,10 +40,10 @@
         <h1><a id = "navigation" href="index.html">Delimate</a></h1>
         <h2 id = "point"></h2>
         <nav>
-            <a class = "navigation" href = "mypage.html">マイページ</a>
-            <a class = "navigation" href = "list.html">食品リスト</a>
-            <a class = "navigation" href = "report.html">レポート</a>
-            <a class = "navigation" href = "game.html">ムダゼロクエスト</a>
+            <a class="navigation" href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+<a class="navigation" href="list.html"><i class="fas fa-list"></i> 食品リスト</a>
+<a class="navigation" href="report.html"><i class="fas fa-chart-bar"></i> レポート</a>
+<a class="navigation" href="game.html"><i class="fas fa-gamepad"></i> ムダゼロクエスト</a>
         </nav>
         <a id="button" href="scan.html">食品登録</a>
         <table id =  "list" border="0" cellspacing="0" cellpadding="5"></table>

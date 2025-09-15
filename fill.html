@@ -9,6 +9,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
         <script>
             document.addEventListener("DOMContentLoaded", () =>{
             result = JSON.parse(localStorage.getItem("readResult"));
@@ -20,16 +22,27 @@
         </script>
     </head>
     <body>
-        <h2 id="midashi">食品情報入力</h2>
-        <form id = "fill">
-            <label for = "item-name">商品名</label>
-            <input type="text" id = "item-name" name = "item-name" style = "display: inline-block; margin-top: 10px;"><br>
-            <label for = "recipe">レシピ検索用の名前</label>
-            <input type="text" id = "recipe" name = "recipe" style = "display: inline-block; margin-top: 10px;"><br>
-            <label><input type = "radio" name = "whichdate" value = 1 style = "display: inline-block; margin-top: 10px;">賞味期限</label>
-            <label><input type = "radio" name = "whichdate" value = 2 style = "display: inline-block; margin-top: 10px;">消費期限</label>
-            <input id = "kigen" type="date" name = "kigen" style = "display: inline-block; margin-top: 10px;">
-            <a onclick = "Submit()" id = "button" style = "display: inline-block; margin-top: 10px;">確定する</a>
-        </form>
+        <h2 id="midashi"><i class="fas fa-basket-shopping"></i> 食品情報入力</h2>
+<form id="fill">
+  <label for="item-name"><i class="fas fa-tag"></i> 商品名</label>
+  <input type="text" id="item-name" name="item-name" placeholder="例: たのしい豆乳"><br>
+  <label for="recipe"><i class="fas fa-utensils"></i> レシピ検索用の名前</label>
+  <input type="text" id="recipe" name="recipe" placeholder="例: 豆乳"><br>
+  <div>
+    <label style="margin-right: 15px;">
+      <input type="radio" name="whichdate" value="1">
+      <i class="fas fa-calendar-day"></i> 賞味期限
+    </label>
+    <label>
+      <input type="radio" name="whichdate" value="2">
+      <i class="fas fa-calendar-check"></i> 消費期限
+    </label>
+  </div>
+  <input id="kigen" type="date" name="kigen" style="margin-top: 20px;">
+  <a onclick="Submit()" id="button" style="display:inline-block; margin-top:20px;">
+    <i class="fas fa-check-circle"></i> 登録！
+  </a>
+</form>
+
     </body>
 </html>

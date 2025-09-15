@@ -8,6 +8,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+
     </head>
     <script>
         document.addEventListener("DOMContentLoaded" , () => {
@@ -16,16 +18,19 @@
 }
 
                 document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
+                renderMyPage()
         })
+        
     </script>
     <body>
         <h1><a id = "navigation" href="index.html">Delimate</a></h1>
         <h2 id = "point"></h2>
         <nav>
-            <a class = "navigation" href = "mypage.html">マイページ</a>
-            <a class = "navigation" href = "list.html">食品リスト</a>
-            <a class = "navigation" href = "report.html">レポート</a>
-            <a class = "navigation" href = "game.html">ムダゼロクエスト</a>
+            <a class="navigation" href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
+<a class="navigation" href="list.html"><i class="fas fa-list"></i> 食品リスト</a>
+<a class="navigation" href="report.html"><i class="fas fa-chart-bar"></i> レポート</a>
+<a class="navigation" href="game.html"><i class="fas fa-gamepad"></i> ムダゼロクエスト</a>
         </nav>
+        <div id = "mypage"></div>
     </body>
 </html>
