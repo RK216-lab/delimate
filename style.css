@@ -263,10 +263,16 @@ label {
 .plant-card {
   background: #fffbe6;
   border: 2px solid #ffd54f;
-  border-radius: 8px;
-  padding: 12px;
-  margin: 8px;
+  border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  flex: 1 1 150px;
+  padding: 16px;
   text-align: center;
+
+  /* 均等サイズにする設定 */
+  width: 180px;
+  height: 250px;  /* 縦長カード */
+  display: flex;
+  flex-direction: column;   /* 中身を縦並び */
+  justify-content: center;  /* 縦方向中央寄せ */
+  align-items: center;
 }
