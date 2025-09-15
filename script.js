@@ -764,9 +764,8 @@ function renderMyPage() {
     const card = document.createElement("div");
     card.className = "plant-card";
     card.innerHTML = `
-      <h3>${plant.type}</h3>
+      <img src="vege/${plant.type}/6.png"  >
       <p>収穫日: ${plant.harvestedAt}</p>
-      <p>${plant.note}</p>
     `;
     container.appendChild(card);
   });
