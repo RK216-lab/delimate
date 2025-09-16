@@ -1,4 +1,3 @@
-
 let point = localStorage.getItem("point");
 if (!point || point === "undefined") {
   localStorage.setItem("point", JSON.stringify(0));
@@ -621,6 +620,7 @@ function updateDisplay() {
     document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
 }
 async function Water() {
+    point = localStorage.getItem("point");
     if(point < 5){
         await customAlert("ポイントが足りません","⚡");
         return;
