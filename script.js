@@ -489,7 +489,7 @@ function SOS(){
 }
 function ReWrite(){
     today = new Date()
-    all = JSON.parse(localStorage.getItem("list"));
+    all = (JSON.parse(localStorage.getItem("list"))) || [];
     list = document.getElementById("list");
     if (all.length !== 0){
     list.innerHTML = `
