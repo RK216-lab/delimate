@@ -621,20 +621,20 @@ function updateDisplay() {
     document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
 }
 async function Water() {
-    if(point < 10){
+    if(point < 5){
         await customAlert("ポイントが足りません","⚡");
         return;
     }
-    point -= 10;
+    point -= 5;
     progress += Math.floor(25/(stage*0.7));
-    await customAlert("10ポイント消費して水やりをしました！","🚿");
+    await customAlert("5ポイント消費して水やりをしました！","🚿");
     rainAnimation()
     if(progress >= 100){
         progress = 0;
         stage++;
         if(stage < 6){
             await customAlert(`ステージアップ！ステージ${stage}へ`,"🌱");
-            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-5ポイント)</a>`
         } else {
             stage = 6;
             progress = 100;
@@ -709,7 +709,7 @@ async function choosePlant(plant) {
             <p id="point-display"></p>
     `
     // 水やりボタンを復活
-    document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+    document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-5ポイント)</a>`
 }
 
 const colors = [
