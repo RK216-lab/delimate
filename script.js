@@ -334,13 +334,13 @@ async function Use(n) {
     today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        record(away,"exused")  
+        localStorage.exused = Number(localStorage.exused)+1;
         await Point(3, away + "を消費(/・ω・)/期限切れちゃったけど捨てないでくれてありがとう💕"); // OK押すまで待機
     } else if (new Date (all[n].date) - today < 0){
-        record(away,"tdused") 
+        localStorage.tdused = Number(localStorage.tdused)+1;
         await Point(3, away + "を消費(/・ω・)/今日が期限だったね！セーフ～"); // OK押すまで待機
     } else {
-        record(away,"afused")     
+        localStorage.afused = Number(localStorage.afused)+1;
         await Point(3, away + "を消費(/・ω・)/!!余裕もって消費できたね☆"); // OK押すまで待機
     }
     all.splice(n, 1);
@@ -357,10 +357,10 @@ async function Trash(n) {
     today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        record(away,"extrash") 
+        localStorage.extrash = Number(localStorage.extrash)+1;
         await Point(-5, away + "の期限切れちゃってたね...これからは期限をしっかり確認しよう！"); // OK押すまで待機
     } else {
-        record(away,"aftrash") 
+        localStorage.extrash = Number(localStorage.extrash)+1;
         await Point(-5,  away + "捨てちゃったの...期限切れてないよ(´；ω；`)"); // OK押すまで待機
     }
     all.splice(n, 1);
