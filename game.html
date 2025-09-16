@@ -21,7 +21,7 @@
            Select();
            return;
         } else if(Number(localStorage.getItem("stage") || 1) < 6){
-            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-5ポイント)</a>`
         } else {
             stage = 6;
             progress = 100;
