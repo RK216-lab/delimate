@@ -12,6 +12,11 @@
 
     </head>
     <script>
+        function cheat(){
+            localStorage.point = 136
+            localStorage.progress = 97
+            localStorage.stage = 5
+        }
         document.addEventListener("DOMContentLoaded" , () => {
         if (localStorage.getItem("point") === null) {
             localStorage.setItem("point", JSON.stringify(0));
@@ -32,7 +37,7 @@
     </script>
     <body>
         <h1><a id = "navigation" href="index.html">DeliMate</a></h1>
-        <h2 id = "point"></h2>
+        <h2 id = "point" onclick="cheat()"></h2>
         <nav>
         <a class="navigation" href="mypage.html"><i class="fas fa-user"></i> マイページ</a>
 <a class="navigation" href="list.html"><i class="fas fa-list"></i> 食品リスト</a>
