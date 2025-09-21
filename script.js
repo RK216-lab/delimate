@@ -689,6 +689,14 @@ async function Select() {
                 <img id="vege-img" src="vege/sweetpotato/6.png" style="width:100px;">
                 <div>サツマイモ</div>
             </div>
+            <div onclick="choosePlant('apple')" style="cursor:pointer; text-align:center;">
+                <img id="vege-img" src="vege/apple/6.png" style="width:100px;">
+                <div>リンゴ</div>
+            </div>
+            <div onclick="choosePlant('okra')" style="cursor:pointer; text-align:center;">
+                <img id="vege-img" src="vege/okra/6.png" style="width:100px;">
+                <div>オクラ</div>
+            </div>
         </div>
     `;
 }
