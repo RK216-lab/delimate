@@ -71,7 +71,7 @@ async function giveLoginBonus() {
   let lastLogin = localStorage.getItem("lastLogin");
   if (!lastLogin || lastLogin === "undefined" || lastLogin !== today) {
     localStorage.setItem("lastLogin", today);
-    await Point(1, "ログインボーナス!!今日もDelimateを使ってくれてありがとう🌟");
+    await Point(1, "ログインボーナス!!今日もDeliMateを使ってくれてありがとう🌟");
     location.reload();
   }
 }
