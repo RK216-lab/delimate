@@ -1,4 +1,3 @@
-
 let point = localStorage.getItem("point");
 if (!point || point === "undefined") {
   localStorage.setItem("point", JSON.stringify(0));
@@ -50,11 +49,11 @@ function NantoZero(key) {
     return isNaN(num) ? 0 : num;
 }
 function updateSubReports() {
-    const afUsed = NantoZero("af-used");
-    const tdUsed = NantoZero("td-used");
-    const exUsed = NantoZero("ex-used");
-    const afTrash = NantoZero("af-trash");
-    const exTrash = NantoZero("ex-trash");
+    const afUsed = NantoZero("afused");
+    const tdUsed = NantoZero("tdused");
+    const exUsed = NantoZero("exused");
+    const afTrash = NantoZero("aftrash");
+    const exTrash = NantoZero("extrash");
     document.getElementById("left-sub").innerHTML = `
         <div>余裕あり: ${afUsed}</div>
         <div>当日: ${tdUsed}</div>
@@ -334,13 +333,13 @@ async function Use(n) {
     today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        record(away,"ex-used")  
+        localStorage.exused = (Number(localStorage.exused) || 0)+1;
         await Point(3, away + "を消費(/・ω・)/期限切れちゃったけど捨てないでくれてありがとう💕"); // OK押すまで待機
     } else if (new Date (all[n].date) - today < 0){
-        record(away,"td-used") 
+        localStorage.tdused = (Number(localStorage.tdused) || 0)+1;
         await Point(3, away + "を消費(/・ω・)/今日が期限だったね！セーフ～"); // OK押すまで待機
     } else {
-        record(away,"af-used")     
+        localStorage.afused = (Number(localStorage.afused) || 0)+1;
         await Point(3, away + "を消費(/・ω・)/!!余裕もって消費できたね☆"); // OK押すまで待機
     }
     all.splice(n, 1);
@@ -357,10 +356,10 @@ async function Trash(n) {
     today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        record(away,"ex-trash") 
+        localStorage.aftrash = (Number(localStorage.aftrash) || 0)+1;
         await Point(-5, away + "の期限切れちゃってたね...これからは期限をしっかり確認しよう！"); // OK押すまで待機
     } else {
-        record(away,"af-trash") 
+        localStorage.extrash = (Number(localStorage.extrash) || 0)+1;
         await Point(-5,  away + "捨てちゃったの...期限切れてないよ(´；ω；`)"); // OK押すまで待機
     }
     all.splice(n, 1);
@@ -489,7 +488,7 @@ function SOS(){
 }
 function ReWrite(){
     today = new Date()
-    all = JSON.parse(localStorage.getItem("list"));
+    all = (JSON.parse(localStorage.getItem("list"))) || [];
     list = document.getElementById("list");
     if (all.length !== 0){
     list.innerHTML = `
@@ -621,25 +620,26 @@ function updateDisplay() {
     document.getElementById("point").innerHTML = `現在${localStorage.getItem("point")}ポイントです`;
 }
 async function Water() {
-    if(point < 10){
+    point = localStorage.getItem("point");
+    if(point < 5){
         await customAlert("ポイントが足りません","⚡");
         return;
     }
-    point -= 10;
+    point -= 5;
     progress += Math.floor(25/(stage*0.7));
-    await customAlert("10ポイント消費して水やりをしました！","🚿");
+    await customAlert("5ポイント消費して水やりをしました！","🚿");
     rainAnimation()
     if(progress >= 100){
         progress = 0;
         stage++;
         if(stage < 6){
             await customAlert(`ステージアップ！ステージ${stage}へ`,"🌱");
-            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+            document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-5ポイント)</a>`
         } else {
             stage = 6;
             progress = 100;
             Confetti()
-            await customAlert(`収穫！完成`,"🥕");
+            await customAlert(`収穫！完成`,"🎉");
             document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Select()"><i class="fa fa-shower"></i> 育てる植物を選ぶ</button>`  
             const plantData = {
                 id: Date.now(),
@@ -685,6 +685,10 @@ async function Select() {
                 <img id="vege-img" src="vege/pumpkin/6.png" style="width:100px;">
                 <div>カボチャ</div>
             </div>
+            <div onclick="choosePlant('sweetpotato')" style="cursor:pointer; text-align:center;">
+                <img id="vege-img" src="vege/sweetpotato/6.png" style="width:100px;">
+                <div>サツマイモ</div>
+            </div>
         </div>
     `;
 }
@@ -709,7 +713,7 @@ async function choosePlant(plant) {
             <p id="point-display"></p>
     `
     // 水やりボタンを復活
-    document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-10ポイント)</a>`
+    document.getElementById("grow-btn").innerHTML = `<a style="padding:10px 20px; font-size:16px;" onclick="Water()"><i class="fa fa-shower"></i> 水をあげる (-5ポイント)</a>`
 }
 
 const colors = [
@@ -764,9 +768,8 @@ function renderMyPage() {
     const card = document.createElement("div");
     card.className = "plant-card";
     card.innerHTML = `
-      <h3>${plant.type}</h3>
+      <img src="vege/${plant.type}/6.png" style="width:150px;">
       <p>収穫日: ${plant.harvestedAt}</p>
-      <p>${plant.note}</p>
     `;
     container.appendChild(card);
   });

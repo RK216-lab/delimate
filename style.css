@@ -253,11 +253,26 @@ label {
     opacity: 0;
   }
 }
+#mypage {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .plant-card {
   background: #fffbe6;
   border: 2px solid #ffd54f;
-  border-radius: 8px;
-  padding: 12px;
-  margin: 8px;
+  border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 16px;
+  text-align: center;
+
+  /* 均等サイズに */
+  width: 180px;
+  height: 250px;  
+  display: flex;
+  flex-direction: column;   
+  justify-content: center;  
+  align-items: center;
 }
