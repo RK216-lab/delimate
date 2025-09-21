@@ -356,10 +356,10 @@ async function Trash(n) {
     today = new Date()
     ReWrite();
     if (new Date (all[n].date) - today < (-1000 * 60 * 60 * 24 * 1)){ 
-        localStorage.aftrash = (Number(localStorage.aftrash) || 0)+1;
+        localStorage.extrash = (Number(localStorage.extrash) || 0)+1;
         await Point(-5, away + "の期限切れちゃってたね...これからは期限をしっかり確認しよう！"); // OK押すまで待機
     } else {
-        localStorage.extrash = (Number(localStorage.extrash) || 0)+1;
+        localStorage.aftrash = (Number(localStorage.aftrash) || 0)+1;
         await Point(-5,  away + "捨てちゃったの...期限切れてないよ(´；ω；`)"); // OK押すまで待機
     }
     all.splice(n, 1);
